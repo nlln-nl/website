@@ -112,6 +112,10 @@
         <button style="padding: 8px 16px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(30,64,175,0.25);">
           收藏本站
         </button>
+        <button id="admin-btn" onclick="openModal()" style="display: none; padding: 8px 16px; background: white; color: #3b82f6; border: 1px solid #dbeafe; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; margin-left: 8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display: inline-block; margin-right: 4px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          管理
+        </button>
       </div>
       <div style="padding-bottom: 16px; display: block;" id="mobile-search">
         <div style="position: relative;">
@@ -249,54 +253,245 @@
     </div>
   </footer>
 
+  <div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 24px;">
+    <div style="background: white; border-radius: 20px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid #f3f4f6;">
+        <h3 style="font-size: 18px; font-weight: 600; color: #111827;" id="modal-title">管理工具</h3>
+        <button onclick="closeModal()" style="width: 32px; height: 32px; border: none; background: #f3f4f6; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#6b7280"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <div style="padding: 24px;">
+        <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#d97706" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <div style="font-size: 13px; color: #92400e;">
+              <p style="font-weight: 600; margin-bottom: 4px;">数据同步说明</p>
+              <p>网站数据存储在 <strong>tools.json</strong> 文件中。添加/编辑/删除工具后，点击「导出数据」下载最新文件，上传到 GitHub 即可同步到网站。</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+          <button onclick="switchTab('add')" id="tab-add" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; cursor: pointer;">添加工具</button>
+          <button onclick="switchTab('edit')" id="tab-edit" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: #f3f4f6; color: #6b7280; cursor: pointer;">编辑工具</button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+          <button onclick="exportTools()" style="flex: 1; padding: 10px; border: 1px solid #dbeafe; border-radius: 12px; font-weight: 500; background: white; color: #3b82f6; cursor: pointer;">导出数据</button>
+          <button onclick="importTools()" style="flex: 1; padding: 10px; border: 1px solid #dbeafe; border-radius: 12px; font-weight: 500; background: white; color: #3b82f6; cursor: pointer;">导入数据</button>
+        </div>
+        
+        <div id="tab-add-content">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具名称</label>
+              <input type="text" id="input-name" placeholder="请输入工具名称" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具描述</label>
+              <input type="text" id="input-desc" placeholder="请输入工具描述" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">网站链接</label>
+              <input type="text" id="input-url" placeholder="请输入网站链接" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">分类</label>
+              <select id="input-category" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+                <option value="productivity">效率工具</option>
+                <option value="image">图片处理</option>
+                <option value="file">文件转换</option>
+                <option value="life">生活服务</option>
+                <option value="education">学习教育</option>
+                <option value="design">设计工具</option>
+                <option value="dev">编程开发</option>
+                <option value="entertainment">娱乐休闲</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">图标</label>
+              <select id="input-icon" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+                <option value="Languages">语言</option>
+                <option value="QrCode">二维码</option>
+                <option value="Clock">时钟</option>
+                <option value="CheckSquare">待办</option>
+                <option value="StickyNote">笔记</option>
+                <option value="FileText">文件</option>
+                <option value="Compress">压缩</option>
+                <option value="Crop">裁剪</option>
+                <option value="Film">视频</option>
+                <option value="Wand2">魔法棒</option>
+                <option value="Layers">图层</option>
+                <option value="Icons">图标</option>
+                <option value="FileDown">下载</option>
+                <option value="Video">影片</option>
+                <option value="Music">音乐</option>
+                <option value="Archive">归档</option>
+                <option value="Table">表格</option>
+                <option value="CloudSun">天气</option>
+                <option value="Truck">快递</option>
+                <option value="Calendar">日历</option>
+                <option value="Calculator">计算器</option>
+                <option value="Wallet">钱包</option>
+                <option value="ChefHat">厨师</option>
+                <option value="BookOpen">书本</option>
+                <option value="BookText">书籍</option>
+                <option value="Search">搜索</option>
+                <option value="GitBranch">分支</option>
+                <option value="SpellCheck">拼写</option>
+                <option value="PenTool">画笔</option>
+                <option value="Palette">调色板</option>
+                <option value="Type">字体</option>
+                <option value="Brand">品牌</option>
+                <option value="Box">盒子</option>
+                <option value="Code2">代码</option>
+                <option value="Terminal">终端</option>
+                <option value="Send">发送</option>
+                <option value="Hash">哈希</option>
+                <option value="Braces">括号</option>
+                <option value="GitCommit">提交</option>
+                <option value="Gamepad">游戏</option>
+                <option value="Headphones">耳机</option>
+                <option value="Smile">笑脸</option>
+              </select>
+            </div>
+            <button onclick="addTool()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 8px;">添加工具</button>
+          </div>
+        </div>
+        
+        <div id="tab-edit-content" style="display: none;">
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">选择要编辑的工具</label>
+            <select id="edit-tool-select" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onchange="loadToolForEdit()" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+              <option value="">请选择工具</option>
+            </select>
+          </div>
+          <div id="edit-form" style="display: none; flex-direction: column; gap: 16px;">
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具名称</label>
+              <input type="text" id="edit-name" placeholder="请输入工具名称" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具描述</label>
+              <input type="text" id="edit-desc" placeholder="请输入工具描述" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">网站链接</label>
+              <input type="text" id="edit-url" placeholder="请输入网站链接" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">分类</label>
+              <select id="edit-category" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+                <option value="productivity">效率工具</option>
+                <option value="image">图片处理</option>
+                <option value="file">文件转换</option>
+                <option value="life">生活服务</option>
+                <option value="education">学习教育</option>
+                <option value="design">设计工具</option>
+                <option value="dev">编程开发</option>
+                <option value="entertainment">娱乐休闲</option>
+              </select>
+            </div>
+            <div>
+              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">图标</label>
+              <select id="edit-icon" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
+                <option value="Languages">语言</option>
+                <option value="QrCode">二维码</option>
+                <option value="Clock">时钟</option>
+                <option value="CheckSquare">待办</option>
+                <option value="StickyNote">笔记</option>
+                <option value="FileText">文件</option>
+                <option value="Compress">压缩</option>
+                <option value="Crop">裁剪</option>
+                <option value="Film">视频</option>
+                <option value="Wand2">魔法棒</option>
+                <option value="Layers">图层</option>
+                <option value="Icons">图标</option>
+                <option value="FileDown">下载</option>
+                <option value="Video">影片</option>
+                <option value="Music">音乐</option>
+                <option value="Archive">归档</option>
+                <option value="Table">表格</option>
+                <option value="CloudSun">天气</option>
+                <option value="Truck">快递</option>
+                <option value="Calendar">日历</option>
+                <option value="Calculator">计算器</option>
+                <option value="Wallet">钱包</option>
+                <option value="ChefHat">厨师</option>
+                <option value="BookOpen">书本</option>
+                <option value="BookText">书籍</option>
+                <option value="Search">搜索</option>
+                <option value="GitBranch">分支</option>
+                <option value="SpellCheck">拼写</option>
+                <option value="PenTool">画笔</option>
+                <option value="Palette">调色板</option>
+                <option value="Type">字体</option>
+                <option value="Brand">品牌</option>
+                <option value="Box">盒子</option>
+                <option value="Code2">代码</option>
+                <option value="Terminal">终端</option>
+                <option value="Send">发送</option>
+                <option value="Hash">哈希</option>
+                <option value="Braces">括号</option>
+                <option value="GitCommit">提交</option>
+                <option value="Gamepad">游戏</option>
+                <option value="Headphones">耳机</option>
+                <option value="Smile">笑脸</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button onclick="updateTool()" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">保存修改</button>
+              <button onclick="deleteTool()" style="flex: 1; padding: 14px; background: #fee2e2; color: #dc2626; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">删除工具</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const tools = [
+    let tools = [];
+    
+    const defaultTools = [
       { id: '1', name: '在线翻译', desc: '支持多语言互译，精准翻译', url: 'https://translate.google.com', category: 'productivity', icon: 'Languages', pop: 98 },
       { id: '2', name: '二维码生成', desc: '快速生成二维码，支持自定义', url: 'https://www.qr-code-scanner.com/qr-code-generator/', category: 'productivity', icon: 'QrCode', pop: 95 },
       { id: '3', name: '在线时钟', desc: '精美的在线时钟，支持世界时间', url: 'https://www.timeanddate.com/worldclock/', category: 'productivity', icon: 'Clock', pop: 92 },
       { id: '4', name: '待办清单', desc: '简洁高效的待办事项管理', url: 'https://todo.microsoft.com', category: 'productivity', icon: 'CheckSquare', pop: 88 },
       { id: '5', name: '笔记工具', desc: '云端笔记，随时随地记录', url: 'https://keep.google.com', category: 'productivity', icon: 'StickyNote', pop: 85 },
       { id: '6', name: 'Markdown编辑器', desc: '在线Markdown编写和预览', url: 'https://markdownlivepreview.com/', category: 'productivity', icon: 'FileText', pop: 82 },
-      
       { id: '7', name: '图片压缩', desc: '无损压缩图片，快速减小体积', url: 'https://tinypng.com', category: 'image', icon: 'Compress', pop: 96 },
       { id: '8', name: '图片裁剪', desc: '在线裁剪图片，支持多种比例', url: 'https://www.canva.com', category: 'image', icon: 'Crop', pop: 93 },
       { id: '9', name: 'GIF制作', desc: '将视频转换为GIF动图', url: 'https://giphy.com/create/gifmaker', category: 'image', icon: 'Film', pop: 90 },
       { id: '10', name: '图片去水印', desc: '智能去除图片水印', url: 'https://www.pixlr.com', category: 'image', icon: 'Wand2', pop: 86 },
       { id: '11', name: '图片合成', desc: '在线图片合成与编辑', url: 'https://www.fotor.com', category: 'image', icon: 'Layers', pop: 83 },
       { id: '12', name: '图标搜索', desc: '海量图标资源搜索下载', url: 'https://www.flaticon.com', category: 'image', icon: 'Icons', pop: 80 },
-      
       { id: '13', name: 'PDF转换', desc: 'PDF与Word互转，支持多种格式', url: 'https://smallpdf.com', category: 'file', icon: 'FileDown', pop: 97 },
       { id: '14', name: '视频转换', desc: '视频格式转换，支持多种编码', url: 'https://www.online-convert.com', category: 'file', icon: 'Video', pop: 91 },
       { id: '15', name: '音频转换', desc: '音频格式转换，免费无限制', url: 'https://cloudconvert.com', category: 'file', icon: 'Music', pop: 87 },
       { id: '16', name: '文件压缩', desc: '在线压缩解压文件', url: 'https://www.zip-online.com', category: 'file', icon: 'Archive', pop: 84 },
       { id: '17', name: 'Excel转表格', desc: '在线Excel查看和转换', url: 'https://www.spreadsheetconverter.com', category: 'file', icon: 'Table', pop: 79 },
-      
       { id: '18', name: '天气预报', desc: '全球天气预报，精准可靠', url: 'https://www.weather.com', category: 'life', icon: 'CloudSun', pop: 99 },
       { id: '19', name: '快递查询', desc: '一键查询快递物流信息', url: 'https://www.kuaidi100.com', category: 'life', icon: 'Truck', pop: 94 },
       { id: '20', name: '万年历', desc: '黄历查询，节气节日', url: 'https://www.nongli.cn', category: 'life', icon: 'Calendar', pop: 89 },
       { id: '21', name: '计算器', desc: '科学计算器，功能强大', url: 'https://www.calculator.net', category: 'life', icon: 'Calculator', pop: 85 },
       { id: '22', name: '汇率换算', desc: '实时汇率，快速换算', url: 'https://www.xe.com', category: 'life', icon: 'Wallet', pop: 81 },
       { id: '23', name: '菜谱大全', desc: '海量菜谱，轻松学做菜', url: 'https://www.xiachufang.com', category: 'life', icon: 'ChefHat', pop: 78 },
-      
       { id: '24', name: '在线学习', desc: '海量课程，随时随地学习', url: 'https://www.coursera.org', category: 'education', icon: 'BookOpen', pop: 96 },
       { id: '25', name: '单词背诵', desc: '高效背单词，轻松记忆', url: 'https://www.ankiweb.net', category: 'education', icon: 'BookText', pop: 92 },
       { id: '26', name: '文献搜索', desc: '学术文献搜索下载', url: 'https://scholar.google.com', category: 'education', icon: 'Search', pop: 88 },
       { id: '27', name: '思维导图', desc: '在线制作思维导图', url: 'https://www.mindmeister.com', category: 'education', icon: 'GitBranch', pop: 84 },
       { id: '28', name: '语法检查', desc: '英文语法检查和校对', url: 'https://www.grammarly.com', category: 'education', icon: 'SpellCheck', pop: 80 },
-      
       { id: '29', name: 'UI设计', desc: '在线UI设计工具', url: 'https://www.figma.com', category: 'design', icon: 'PenTool', pop: 95 },
       { id: '30', name: '配色方案', desc: '专业配色方案生成器', url: 'https://coolors.co', category: 'design', icon: 'Palette', pop: 90 },
       { id: '31', name: '字体预览', desc: '在线字体预览和下载', url: 'https://fonts.google.com', category: 'design', icon: 'Type', pop: 86 },
       { id: '32', name: 'Logo设计', desc: '智能Logo设计生成', url: 'https://www.logo.com', category: 'design', icon: 'Brand', pop: 82 },
       { id: '33', name: '原型设计', desc: '快速制作产品原型', url: 'https://www.axure.com', category: 'design', icon: 'Box', pop: 77 },
-      
       { id: '34', name: '代码格式化', desc: '代码格式化和美化', url: 'https://prettier.io/playground', category: 'dev', icon: 'Code2', pop: 93 },
       { id: '35', name: '在线IDE', desc: '浏览器端代码编辑器', url: 'https://replit.com', category: 'dev', icon: 'Terminal', pop: 89 },
       { id: '36', name: 'API测试', desc: 'API接口测试工具', url: 'https://www.postman.com', category: 'dev', icon: 'Send', pop: 85 },
       { id: '37', name: '正则测试', desc: '正则表达式测试工具', url: 'https://regex101.com', category: 'dev', icon: 'Hash', pop: 81 },
       { id: '38', name: 'JSON解析', desc: 'JSON在线解析和格式化', url: 'https://jsonlint.com', category: 'dev', icon: 'Braces', pop: 78 },
       { id: '39', name: 'Git教程', desc: 'Git版本控制学习', url: 'https://try.github.io', category: 'dev', icon: 'GitCommit', pop: 74 },
-      
       { id: '40', name: '小游戏', desc: '休闲益智小游戏', url: 'https://www.crazygames.com', category: 'entertainment', icon: 'Gamepad', pop: 91 },
       { id: '41', name: '影视推荐', desc: '影视评分和推荐', url: 'https://www.douban.com', category: 'entertainment', icon: 'Film', pop: 87 },
       { id: '42', name: '音乐播放器', desc: '在线音乐播放', url: 'https://music.163.com', category: 'entertainment', icon: 'Headphones', pop: 83 },
@@ -449,8 +644,70 @@
       renderTools(filtered);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    async function loadTools() {
+      try {
+        const response = await fetch('tools.json');
+        if (response.ok) {
+          tools = await response.json();
+        } else {
+          tools = [...defaultTools];
+        }
+      } catch {
+        tools = [...defaultTools];
+      }
       renderTools(tools);
+      
+      const isLocal = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' || 
+                      window.location.protocol === 'file:';
+      if (isLocal) {
+        document.getElementById('admin-btn').style.display = 'inline-block';
+      }
+    }
+
+    function exportTools() {
+      const dataStr = JSON.stringify(tools, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'tools.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function importTools() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const imported = JSON.parse(event.target.result);
+            if (Array.isArray(imported)) {
+              tools = imported;
+              filterCategory(currentCategory);
+              alert('导入成功！');
+            } else {
+              alert('无效的JSON格式');
+            }
+          } catch {
+            alert('JSON解析失败');
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTools();
       
       if (window.innerWidth >= 768) {
         document.getElementById('desktop-search').style.display = 'block';
@@ -465,6 +722,168 @@
       } else {
         document.getElementById('desktop-search').style.display = 'none';
         document.getElementById('mobile-search').style.display = 'block';
+      }
+    });
+
+    let editingToolId = null;
+
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+      populateEditDropdown();
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      editingToolId = null;
+      document.getElementById('edit-form').style.display = 'none';
+      document.getElementById('edit-tool-select').value = '';
+    }
+
+    function switchTab(tab) {
+      const addTab = document.getElementById('tab-add');
+      const editTab = document.getElementById('tab-edit');
+      const addContent = document.getElementById('tab-add-content');
+      const editContent = document.getElementById('tab-edit-content');
+      
+      if (tab === 'add') {
+        addTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
+        addTab.style.color = 'white';
+        editTab.style.background = '#f3f4f6';
+        editTab.style.color = '#6b7280';
+        addContent.style.display = 'block';
+        editContent.style.display = 'none';
+      } else {
+        editTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
+        editTab.style.color = 'white';
+        addTab.style.background = '#f3f4f6';
+        addTab.style.color = '#6b7280';
+        editContent.style.display = 'block';
+        addContent.style.display = 'none';
+        populateEditDropdown();
+      }
+    }
+
+    function populateEditDropdown() {
+      const select = document.getElementById('edit-tool-select');
+      select.innerHTML = '<option value="">请选择工具</option>';
+      tools.forEach(tool => {
+        const option = document.createElement('option');
+        option.value = tool.id;
+        option.textContent = tool.name;
+        select.appendChild(option);
+      });
+    }
+
+    function addTool() {
+      const name = document.getElementById('input-name').value.trim();
+      const desc = document.getElementById('input-desc').value.trim();
+      const url = document.getElementById('input-url').value.trim();
+      const category = document.getElementById('input-category').value;
+      const icon = document.getElementById('input-icon').value;
+
+      if (!name || !desc || !url) {
+        alert('请填写完整信息');
+        return;
+      }
+
+      const newTool = {
+        id: Date.now().toString(),
+        name,
+        desc,
+        url: url.startsWith('http') ? url : 'https://' + url,
+        category,
+        icon,
+        pop: 50
+      };
+
+      tools.push(newTool);
+      filterCategory(currentCategory);
+      closeModal();
+      
+      document.getElementById('input-name').value = '';
+      document.getElementById('input-desc').value = '';
+      document.getElementById('input-url').value = '';
+      document.getElementById('input-category').value = 'productivity';
+      document.getElementById('input-icon').value = 'Languages';
+      
+      if (confirm('工具添加成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
+        exportTools();
+      }
+    }
+
+    function loadToolForEdit() {
+      const toolId = document.getElementById('edit-tool-select').value;
+      if (!toolId) {
+        document.getElementById('edit-form').style.display = 'none';
+        editingToolId = null;
+        return;
+      }
+
+      const tool = tools.find(t => t.id === toolId);
+      if (tool) {
+        editingToolId = toolId;
+        document.getElementById('edit-name').value = tool.name;
+        document.getElementById('edit-desc').value = tool.desc;
+        document.getElementById('edit-url').value = tool.url;
+        document.getElementById('edit-category').value = tool.category;
+        document.getElementById('edit-icon').value = tool.icon;
+        document.getElementById('edit-form').style.display = 'flex';
+      }
+    }
+
+    function updateTool() {
+      if (!editingToolId) return;
+
+      const name = document.getElementById('edit-name').value.trim();
+      const desc = document.getElementById('edit-desc').value.trim();
+      const url = document.getElementById('edit-url').value.trim();
+      const category = document.getElementById('edit-category').value;
+      const icon = document.getElementById('edit-icon').value;
+
+      if (!name || !desc || !url) {
+        alert('请填写完整信息');
+        return;
+      }
+
+      const index = tools.findIndex(t => t.id === editingToolId);
+      if (index !== -1) {
+        tools[index] = {
+          ...tools[index],
+          name,
+          desc,
+          url: url.startsWith('http') ? url : 'https://' + url,
+          category,
+          icon
+        };
+        filterCategory(currentCategory);
+        closeModal();
+        
+        if (confirm('工具修改成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
+          exportTools();
+        }
+      }
+    }
+
+    function deleteTool() {
+      if (!editingToolId) return;
+
+      if (confirm('确定要删除这个工具吗？')) {
+        const index = tools.findIndex(t => t.id === editingToolId);
+        if (index !== -1) {
+          tools.splice(index, 1);
+          filterCategory(currentCategory);
+          closeModal();
+          
+          if (confirm('工具删除成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
+            exportTools();
+          }
+        }
+      }
+    }
+
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') {
+        closeModal();
       }
     });
   </script>
