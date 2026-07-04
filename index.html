@@ -275,6 +275,7 @@
         <div style="display: flex; gap: 8px; margin-bottom: 20px;">
           <button onclick="switchTab('add')" id="tab-add" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; cursor: pointer;">添加工具</button>
           <button onclick="switchTab('edit')" id="tab-edit" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: #f3f4f6; color: #6b7280; cursor: pointer;">编辑工具</button>
+          <button onclick="switchTab('check')" id="tab-check" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: #f3f4f6; color: #6b7280; cursor: pointer;">检测网站</button>
         </div>
         <div style="display: flex; gap: 8px; margin-bottom: 20px;">
           <button onclick="exportTools()" style="flex: 1; padding: 10px; border: 1px solid #dbeafe; border-radius: 12px; font-weight: 500; background: white; color: #3b82f6; cursor: pointer;">导出数据</button>
@@ -443,6 +444,23 @@
               <button onclick="updateTool()" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">保存修改</button>
               <button onclick="deleteTool()" style="flex: 1; padding: 14px; background: #fee2e2; color: #dc2626; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">删除工具</button>
             </div>
+          </div>
+        </div>
+        
+        <div id="tab-check-content" style="display: none;">
+          <div style="margin-bottom: 16px;">
+            <button onclick="checkAllSites()" id="check-all-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">开始检测所有网站</button>
+          </div>
+          <div id="check-progress" style="display: none; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+              <span style="color: #374151;">检测进度</span>
+              <span style="color: #3b82f6; font-weight: 500;" id="progress-text">0/0</span>
+            </div>
+            <div style="height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden;">
+              <div id="progress-bar" style="height: 100%; background: linear-gradient(135deg, #1e40af, #2563eb); width: 0%; transition: width 0.3s;"></div>
+            </div>
+          </div>
+          <div id="check-results" style="max-height: 400px; overflow-y: auto;">
           </div>
         </div>
       </div>
@@ -742,24 +760,34 @@
     function switchTab(tab) {
       const addTab = document.getElementById('tab-add');
       const editTab = document.getElementById('tab-edit');
+      const checkTab = document.getElementById('tab-check');
       const addContent = document.getElementById('tab-add-content');
       const editContent = document.getElementById('tab-edit-content');
+      const checkContent = document.getElementById('tab-check-content');
+      
+      addTab.style.background = '#f3f4f6';
+      addTab.style.color = '#6b7280';
+      editTab.style.background = '#f3f4f6';
+      editTab.style.color = '#6b7280';
+      checkTab.style.background = '#f3f4f6';
+      checkTab.style.color = '#6b7280';
+      addContent.style.display = 'none';
+      editContent.style.display = 'none';
+      checkContent.style.display = 'none';
       
       if (tab === 'add') {
         addTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
         addTab.style.color = 'white';
-        editTab.style.background = '#f3f4f6';
-        editTab.style.color = '#6b7280';
         addContent.style.display = 'block';
-        editContent.style.display = 'none';
-      } else {
+      } else if (tab === 'edit') {
         editTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
         editTab.style.color = 'white';
-        addTab.style.background = '#f3f4f6';
-        addTab.style.color = '#6b7280';
         editContent.style.display = 'block';
-        addContent.style.display = 'none';
         populateEditDropdown();
+      } else if (tab === 'check') {
+        checkTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
+        checkTab.style.color = 'white';
+        checkContent.style.display = 'block';
       }
     }
 
@@ -877,6 +905,105 @@
           if (confirm('工具删除成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
             exportTools();
           }
+        }
+      }
+    }
+
+    async function checkAllSites() {
+      const btn = document.getElementById('check-all-btn');
+      const progress = document.getElementById('check-progress');
+      const results = document.getElementById('check-results');
+      const progressText = document.getElementById('progress-text');
+      const progressBar = document.getElementById('progress-bar');
+      
+      btn.disabled = true;
+      btn.textContent = '检测中...';
+      progress.style.display = 'block';
+      results.innerHTML = '';
+      
+      let checked = 0;
+      const total = tools.length;
+      const failedTools = [];
+      
+      for (const tool of tools) {
+        checked++;
+        progressText.textContent = `${checked}/${total}`;
+        progressBar.style.width = `${(checked / total) * 100}%`;
+        
+        const result = await checkSite(tool.url);
+        const resultDiv = document.createElement('div');
+        resultDiv.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;';
+        
+        if (result.success) {
+          resultDiv.style.background = '#ecfdf5';
+          resultDiv.innerHTML = `
+            <span style="color: #065f46; font-weight: 500;">${tool.name}</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span style="color: #10b981;">${result.time}ms</span>
+            </div>
+          `;
+        } else {
+          resultDiv.style.background = '#fef2f2';
+          resultDiv.innerHTML = `
+            <span style="color: #991b1b; font-weight: 500;">${tool.name}</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              <span style="color: #ef4444;">${result.error}</span>
+            </div>
+          `;
+          failedTools.push(tool);
+        }
+        
+        results.appendChild(resultDiv);
+        results.scrollTop = results.scrollHeight;
+        
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+      
+      btn.disabled = false;
+      btn.textContent = '重新检测';
+      
+      if (failedTools.length > 0) {
+        results.innerHTML += `
+          <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 8px;">
+            <div style="font-weight: 600; color: #92400e; margin-bottom: 8px;">检测结果：${failedTools.length} 个网站无法访问</div>
+            <div style="font-size: 13px; color: #b45309;">建议检查这些网站链接是否正确或更新为可用链接</div>
+          </div>
+        `;
+      } else {
+        results.innerHTML += `
+          <div style="margin-top: 16px; padding: 12px; background: #ecfdf5; border-radius: 8px;">
+            <div style="font-weight: 600; color: #065f46;">🎉 所有网站检测通过！</div>
+          </div>
+        `;
+      }
+    }
+
+    async function checkSite(url) {
+      const startTime = Date.now();
+      try {
+        const response = await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          timeout: 10000
+        });
+        return { success: true, time: Date.now() - startTime };
+      } catch (error) {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('timeout')), 10000)
+          );
+          const loadPromise = new Promise((resolve) => {
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(true);
+          });
+          await Promise.race([loadPromise, timeoutPromise]);
+          return { success: true, time: Date.now() - startTime };
+        } catch {
+          return { success: false, error: '无法访问', time: Date.now() - startTime };
         }
       }
     }

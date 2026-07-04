@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.trae/
+.DS_Store
+*.log
+.vscode/
+src/
+package.json
+vite.config.ts
+tailwind.config.js
+postcss.config.js
+tsconfig.json
