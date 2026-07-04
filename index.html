@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生活小工具 - 实用工具导航</title>
+  <meta name="description" content="聚合各类生活小工具，效率工具、图片处理、文件转换、学习教育等，一站式导航服务">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background-color: #f9fafb; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    
+    :root {
+      --primary-50: #eff6ff; --primary-100: #dbeafe; --primary-200: #bfdbfe;
+      --primary-300: #93c5fd; --primary-400: #60a5fa; --primary-500: #3b82f6;
+      --primary-600: #2563eb; --primary-700: #1d4ed8; --primary-800: #1e40af;
+      --primary-900: #1e3a8a;
+      --secondary-50: #f0fdfa; --secondary-100: #ccfbf1; --secondary-200: #99f6e4;
+      --secondary-500: #14b8a6; --secondary-600: #0d9488;
+    }
+    
+    .bg-gradient-primary { background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); }
+    .bg-gradient-hero { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #f0fdfa 100%); }
+    .text-gradient { background: linear-gradient(135deg, #1e40af, #0d9488); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(12px);
+      border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .hero-section { padding: 64px 0; }
+    
+    .category-tabs {
+      background: white; border-bottom: 1px solid #f3f4f6;
+      position: sticky; top: 64px; z-index: 40; backdrop-filter: blur(8px);
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .category-tabs::-webkit-scrollbar { display: none; }
+    
+    .category-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-radius: 9999px;
+      font-size: 14px; font-weight: 500;
+      transition: all 0.3s ease; cursor: pointer; border: none;
+    }
+    
+    .tools-grid {
+      display: grid; grid-template-columns: repeat(1, 1fr);
+      gap: 20px; padding: 48px 0;
+    }
+    @media (min-width: 640px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .tools-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1280px) { .tools-grid { grid-template-columns: repeat(4, 1fr); } }
+    
+    .tool-card {
+      background: white; border-radius: 20px; padding: 20px;
+      border: 1px solid #f3f4f6;
+      transition: all 0.3s ease; cursor: pointer;
+      display: flex; gap: 16px;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(30, 64, 175, 0.1);
+      border-color: #dbeafe;
+    }
+    
+    .icon-box {
+      width: 48px; height: 48px; border-radius: 16px;
+      background: linear-gradient(135deg, #eff6ff, #ccfbf1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .star { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .star-filled { background: #fbbf24; }
+    .star-empty { background: #e5e7eb; }
+    
+    footer { background: #f9fafb; border-top: 1px solid #f3f4f6; padding: 48px 0; margin-top: 48px; }
+    
+    .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+    .animate-slide-up { animation: slideUp 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div style="display: flex; align-items: center; justify-content: space-between; height: 64px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e40af, #0d9488); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(30,64,175,0.25);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 14l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          </div>
+          <span class="font-display text-xl font-semibold text-gradient">生活小工具</span>
+        </div>
+        <div style="flex: 1; max-width: 400px; margin: 0 32px; display: none;" id="desktop-search">
+          <div style="position: relative;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#9ca3af" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="搜索工具..." oninput="handleSearch(this.value)"
+              style="width: 100%; padding: 10px 16px 10px 44px; border-radius: 9999px; border: 1px solid #e5e7eb; background: #f9fafb; outline: none; transition: all 0.3s;"
+              onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)';"
+              onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
+            />
+          </div>
+        </div>
+        <button style="padding: 8px 16px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(30,64,175,0.25);">
+          收藏本站
+        </button>
+      </div>
+      <div style="padding-bottom: 16px; display: block;" id="mobile-search">
+        <div style="position: relative;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#9ca3af" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="搜索工具..." oninput="handleSearch(this.value)"
+            style="width: 100%; padding: 10px 16px 10px 44px; border-radius: 9999px; border: 1px solid #e5e7eb; background: #f9fafb; outline: none;"
+          />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-section bg-gradient-hero" style="position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -80px; right: -80px; width: 160px; height: 160px; background: rgba(59,130,246,0.1); border-radius: 50%; filter: blur(60px);"></div>
+    <div style="position: absolute; bottom: -80px; left: -80px; width: 160px; height: 160px; background: rgba(13,148,136,0.1); border-radius: 50%; filter: blur(60px);"></div>
+    <div class="container" style="position: relative;">
+      <div style="text-align: center; max-width: 900px; margin: 0 auto;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(255,255,255,0.8); border-radius: 9999px; border: 1px solid #f3f4f6; margin-bottom: 24px; animation: fadeIn 0.5s ease-out;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span style="font-size: 14px; color: #4b5563;">发现更多实用工具</span>
+        </div>
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-gray-900 mb-8 animate-slide-up" style="line-height: 1.2;">
+          你的<span class="text-gradient">生活</span><br/>
+          效率<span class="text-gradient">好帮手</span>
+        </h1>
+        <p style="font-size: 18px; color: #6b7280; margin-bottom: 32px; line-height: 1.6;" class="animate-slide-up" style="animation-delay: 0.2s;">
+          聚合各类实用工具，涵盖效率、设计、学习、娱乐等多个领域<br/>
+          一站式导航，让你的生活更便捷
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;" class="animate-slide-up" style="animation-delay: 0.4s;">
+          <a href="#tools" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 32px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border-radius: 9999px; font-weight: 500; text-decoration: none; box-shadow: 0 8px 24px rgba(30,64,175,0.3); transition: all 0.3s;">
+            浏览工具
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="category-tabs">
+    <div class="container">
+      <div style="display: flex; gap: 8px; padding: 16px 0;">
+        <button class="category-btn active" data-category="all" onclick="filterCategory('all')" style="background: linear-gradient(135deg, #1e40af, #2563eb); color: white; box-shadow: 0 4px 16px rgba(30,64,175,0.3);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          全部
+        </button>
+        <button class="category-btn" data-category="productivity" onclick="filterCategory('productivity')" style="background: #fef3c7; color: #d97706;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          效率工具
+        </button>
+        <button class="category-btn" data-category="image" onclick="filterCategory('image')" style="background: #fce7f3; color: #db2777;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          图片处理
+        </button>
+        <button class="category-btn" data-category="file" onclick="filterCategory('file')" style="background: #dbeafe; color: #2563eb;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          文件转换
+        </button>
+        <button class="category-btn" data-category="life" onclick="filterCategory('life')" style="background: #dcfce7; color: #16a34a;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          生活服务
+        </button>
+        <button class="category-btn" data-category="education" onclick="filterCategory('education')" style="background: #f3e8ff; color: #9333ea;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          学习教育
+        </button>
+        <button class="category-btn" data-category="design" onclick="filterCategory('design')" style="background: #e0e7ff; color: #6366f1;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          设计工具
+        </button>
+        <button class="category-btn" data-category="dev" onclick="filterCategory('dev')" style="background: #cffafe; color: #0891b2;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+          编程开发
+        </button>
+        <button class="category-btn" data-category="entertainment" onclick="filterCategory('entertainment')" style="background: #fee2e2; color: #dc2626;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          娱乐休闲
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section id="tools" class="container">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
+      <div>
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-gray-900" id="category-title">全部工具</h2>
+        <p style="color: #6b7280; margin-top: 8px;" id="tool-count">共找到 43 个工具</p>
+      </div>
+      <div style="display: none; align-items: center; gap: 8px; font-size: 14px; color: #6b7280;">
+        <span style="padding: 6px 12px; background: #eff6ff; color: #2563eb; border-radius: 9999px;">热门推荐</span>
+      </div>
+    </div>
+    <div class="tools-grid" id="tools-grid">
+      <!-- Tools will be dynamically inserted here -->
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 32px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e40af, #0d9488); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 14l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            </div>
+            <span class="font-display text-xl font-semibold text-gray-900">生活小工具</span>
+          </div>
+          <p style="color: #6b7280; margin-bottom: 16px; max-width: 400px;">
+            聚合各类实用工具，涵盖效率、设计、学习、娱乐等多个领域，一站式导航服务，让你的生活更便捷。
+          </p>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; margin-bottom: 16px;">快速链接</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">关于我们</a></li>
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">联系我们</a></li>
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">隐私政策</a></li>
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">使用条款</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; margin-bottom: 16px;">工具分类</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">效率工具</a></li>
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">设计工具</a></li>
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">学习教育</a></li>
+            <li><a href="#" style="color: #6b7280; text-decoration: none;">生活服务</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #e5e7eb; margin-top: 32px; padding-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <p style="color: #6b7280; font-size: 14px;">© 2024 生活小工具. 保留所有权利.</p>
+        <p style="color: #6b7280; font-size: 14px;">用 ❤️ 打造</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const tools = [
+      { id: '1', name: '在线翻译', desc: '支持多语言互译，精准翻译', url: 'https://translate.google.com', category: 'productivity', icon: 'Languages', pop: 98 },
+      { id: '2', name: '二维码生成', desc: '快速生成二维码，支持自定义', url: 'https://www.qr-code-scanner.com/qr-code-generator/', category: 'productivity', icon: 'QrCode', pop: 95 },
+      { id: '3', name: '在线时钟', desc: '精美的在线时钟，支持世界时间', url: 'https://www.timeanddate.com/worldclock/', category: 'productivity', icon: 'Clock', pop: 92 },
+      { id: '4', name: '待办清单', desc: '简洁高效的待办事项管理', url: 'https://todo.microsoft.com', category: 'productivity', icon: 'CheckSquare', pop: 88 },
+      { id: '5', name: '笔记工具', desc: '云端笔记，随时随地记录', url: 'https://keep.google.com', category: 'productivity', icon: 'StickyNote', pop: 85 },
+      { id: '6', name: 'Markdown编辑器', desc: '在线Markdown编写和预览', url: 'https://markdownlivepreview.com/', category: 'productivity', icon: 'FileText', pop: 82 },
+      
+      { id: '7', name: '图片压缩', desc: '无损压缩图片，快速减小体积', url: 'https://tinypng.com', category: 'image', icon: 'Compress', pop: 96 },
+      { id: '8', name: '图片裁剪', desc: '在线裁剪图片，支持多种比例', url: 'https://www.canva.com', category: 'image', icon: 'Crop', pop: 93 },
+      { id: '9', name: 'GIF制作', desc: '将视频转换为GIF动图', url: 'https://giphy.com/create/gifmaker', category: 'image', icon: 'Film', pop: 90 },
+      { id: '10', name: '图片去水印', desc: '智能去除图片水印', url: 'https://www.pixlr.com', category: 'image', icon: 'Wand2', pop: 86 },
+      { id: '11', name: '图片合成', desc: '在线图片合成与编辑', url: 'https://www.fotor.com', category: 'image', icon: 'Layers', pop: 83 },
+      { id: '12', name: '图标搜索', desc: '海量图标资源搜索下载', url: 'https://www.flaticon.com', category: 'image', icon: 'Icons', pop: 80 },
+      
+      { id: '13', name: 'PDF转换', desc: 'PDF与Word互转，支持多种格式', url: 'https://smallpdf.com', category: 'file', icon: 'FileDown', pop: 97 },
+      { id: '14', name: '视频转换', desc: '视频格式转换，支持多种编码', url: 'https://www.online-convert.com', category: 'file', icon: 'Video', pop: 91 },
+      { id: '15', name: '音频转换', desc: '音频格式转换，免费无限制', url: 'https://cloudconvert.com', category: 'file', icon: 'Music', pop: 87 },
+      { id: '16', name: '文件压缩', desc: '在线压缩解压文件', url: 'https://www.zip-online.com', category: 'file', icon: 'Archive', pop: 84 },
+      { id: '17', name: 'Excel转表格', desc: '在线Excel查看和转换', url: 'https://www.spreadsheetconverter.com', category: 'file', icon: 'Table', pop: 79 },
+      
+      { id: '18', name: '天气预报', desc: '全球天气预报，精准可靠', url: 'https://www.weather.com', category: 'life', icon: 'CloudSun', pop: 99 },
+      { id: '19', name: '快递查询', desc: '一键查询快递物流信息', url: 'https://www.kuaidi100.com', category: 'life', icon: 'Truck', pop: 94 },
+      { id: '20', name: '万年历', desc: '黄历查询，节气节日', url: 'https://www.nongli.cn', category: 'life', icon: 'Calendar', pop: 89 },
+      { id: '21', name: '计算器', desc: '科学计算器，功能强大', url: 'https://www.calculator.net', category: 'life', icon: 'Calculator', pop: 85 },
+      { id: '22', name: '汇率换算', desc: '实时汇率，快速换算', url: 'https://www.xe.com', category: 'life', icon: 'Wallet', pop: 81 },
+      { id: '23', name: '菜谱大全', desc: '海量菜谱，轻松学做菜', url: 'https://www.xiachufang.com', category: 'life', icon: 'ChefHat', pop: 78 },
+      
+      { id: '24', name: '在线学习', desc: '海量课程，随时随地学习', url: 'https://www.coursera.org', category: 'education', icon: 'BookOpen', pop: 96 },
+      { id: '25', name: '单词背诵', desc: '高效背单词，轻松记忆', url: 'https://www.ankiweb.net', category: 'education', icon: 'BookText', pop: 92 },
+      { id: '26', name: '文献搜索', desc: '学术文献搜索下载', url: 'https://scholar.google.com', category: 'education', icon: 'Search', pop: 88 },
+      { id: '27', name: '思维导图', desc: '在线制作思维导图', url: 'https://www.mindmeister.com', category: 'education', icon: 'GitBranch', pop: 84 },
+      { id: '28', name: '语法检查', desc: '英文语法检查和校对', url: 'https://www.grammarly.com', category: 'education', icon: 'SpellCheck', pop: 80 },
+      
+      { id: '29', name: 'UI设计', desc: '在线UI设计工具', url: 'https://www.figma.com', category: 'design', icon: 'PenTool', pop: 95 },
+      { id: '30', name: '配色方案', desc: '专业配色方案生成器', url: 'https://coolors.co', category: 'design', icon: 'Palette', pop: 90 },
+      { id: '31', name: '字体预览', desc: '在线字体预览和下载', url: 'https://fonts.google.com', category: 'design', icon: 'Type', pop: 86 },
+      { id: '32', name: 'Logo设计', desc: '智能Logo设计生成', url: 'https://www.logo.com', category: 'design', icon: 'Brand', pop: 82 },
+      { id: '33', name: '原型设计', desc: '快速制作产品原型', url: 'https://www.axure.com', category: 'design', icon: 'Box', pop: 77 },
+      
+      { id: '34', name: '代码格式化', desc: '代码格式化和美化', url: 'https://prettier.io/playground', category: 'dev', icon: 'Code2', pop: 93 },
+      { id: '35', name: '在线IDE', desc: '浏览器端代码编辑器', url: 'https://replit.com', category: 'dev', icon: 'Terminal', pop: 89 },
+      { id: '36', name: 'API测试', desc: 'API接口测试工具', url: 'https://www.postman.com', category: 'dev', icon: 'Send', pop: 85 },
+      { id: '37', name: '正则测试', desc: '正则表达式测试工具', url: 'https://regex101.com', category: 'dev', icon: 'Hash', pop: 81 },
+      { id: '38', name: 'JSON解析', desc: 'JSON在线解析和格式化', url: 'https://jsonlint.com', category: 'dev', icon: 'Braces', pop: 78 },
+      { id: '39', name: 'Git教程', desc: 'Git版本控制学习', url: 'https://try.github.io', category: 'dev', icon: 'GitCommit', pop: 74 },
+      
+      { id: '40', name: '小游戏', desc: '休闲益智小游戏', url: 'https://www.crazygames.com', category: 'entertainment', icon: 'Gamepad', pop: 91 },
+      { id: '41', name: '影视推荐', desc: '影视评分和推荐', url: 'https://www.douban.com', category: 'entertainment', icon: 'Film', pop: 87 },
+      { id: '42', name: '音乐播放器', desc: '在线音乐播放', url: 'https://music.163.com', category: 'entertainment', icon: 'Headphones', pop: 83 },
+      { id: '43', name: '笑话大全', desc: '海量笑话，开心每一天', url: 'https://www.qiushibaike.com', category: 'entertainment', icon: 'Smile', pop: 79 },
+    ];
+
+    const icons = {
+      Languages: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
+      QrCode: '<path d="M3 9h8V3H3v6zm0 12h8v-6H3v6zm10 0h8v-6h-8v6zm0-18v6h8V3h-8z"/>',
+      Clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+      CheckSquare: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>',
+      StickyNote: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm0-4H7v-2h7v2zm-3-5V3.5L18.5 9H13z"/>',
+      FileText: '<path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>',
+      Compress: '<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>',
+      Crop: '<path d="M17 15h2V7c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h8v-2zM7 7h10v10H7V7z"/>',
+      Film: '<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',
+      Wand2: '<path d="M15.29 4.71L14 6l2 2 1.29-1.29-2-2zM6 14l-2 2 1.29 1.29 2-2-1.29-1.29zM4 4h4v4H4V4zm16 16h-4v-4h4v4zM6 18H4v-4h2v4zm12-10h2V6h-2v2zM10 14H8v4h2v-4zm6-8h-4V4h4v2zm-4 10h4v4h-4v-4z"/>',
+      Layers: '<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.37 5.74zM12 16l-8.06-6.04L12 4l8.06 6.04L12 16z"/>',
+      Icons: '<path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>',
+      FileDown: '<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>',
+      Video: '<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',
+      Music: '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>',
+      Archive: '<path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.15.55l-1.39 1.68C3.21 5.79 3 6.32 3 6.9V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.9c0-.58-.21-1.11-.54-1.67zM12 17.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zm3.5-9l-3.5 4h-2l3.5-4h2z"/>',
+      Table: '<path d="M10 18h4v-2h-4v2zM3 6v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm16-4H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>',
+      CloudSun: '<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>',
+      Truck: '<path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>',
+      Calendar: '<path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>',
+      Calculator: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>',
+      Wallet: '<path d="M17 6H7c-1.1 0-1.99.9-1.99 2L5 18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H7V8h10v10zm-3-5c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/>',
+      ChefHat: '<path d="M12 3L3 9v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-9-6zm3.66 6l1.44 4H7l1.44-4h7.22z"/>',
+      BookOpen: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+      BookText: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+      Search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+      GitBranch: '<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>',
+      SpellCheck: '<path d="M12.73 14.73L7 20.46l-1.41-1.41L12.73 12l6.73 6.73-1.41 1.41zM15.5 4l-1.41-1.41C12.48 1.25 11.34 1 11 1H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4.5c0-.83-.38-1.58-1-2.09L18 5.91V16h-2V4h1.5z"/>',
+      PenTool: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+      Palette: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+      Type: '<path d="M14.5 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V7.5L14.5 2zm-2 16H8v-2h4.5v2zm0-4H8v-2h4.5v2zm0-4H8V8h4.5v2zm6 8H17v-2h1.5v2zm0-4H17v-2h1.5v2zm0-4H17V8h1.5v2z"/>',
+      Brand: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+      Box: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>',
+      Code2: '<path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>',
+      Terminal: '<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6v-2zm0 4h8v2H6v-2zm10 0h2v2h-2v-2zm-6-4h8v2h-8v-2z"/>',
+      Send: '<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>',
+      Hash: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>',
+      Braces: '<path d="M18 7h-5v4h-2V7H6v10h5v-4h2v4h5V7zm-2 8h-2V9h2v6z"/>',
+      GitCommit: '<circle cx="12" cy="12" r="3"/><path d="M19 12c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.93 0 3.68-.79 4.94-2.06l1.42 1.42C17.69 19.53 14.92 21 12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9z"/>',
+      Gamepad: '<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>',
+      Headphones: '<path d="M12 3a9 9 0 0 0-9 9v6a9 9 0 0 0 18 0v-6a9 9 0 0 0-9-9zm0 16a7 7 0 0 1-7-7v-1h3v8h2v-6h2v6h2v-8h3v1a7 7 0 0 1-7 7z"/>',
+      Smile: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+    };
+
+    const categoryNames = {
+      all: '全部工具', productivity: '效率工具', image: '图片处理',
+      file: '文件转换', life: '生活服务', education: '学习教育',
+      design: '设计工具', dev: '编程开发', entertainment: '娱乐休闲'
+    };
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function renderTools(filteredTools) {
+      const grid = document.getElementById('tools-grid');
+      grid.innerHTML = '';
+      
+      if (filteredTools.length === 0) {
+        grid.innerHTML = `
+          <div style="text-align: center; padding: 80px 0; grid-column: 1 / -1;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="#9ca3af"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3 style="font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 8px;">未找到工具</h3>
+            <p style="color: #6b7280;">尝试更换关键词或选择其他分类</p>
+          </div>
+        `;
+        return;
+      }
+
+      filteredTools.forEach(tool => {
+        const stars = Math.round(tool.pop / 20);
+        const starHtml = Array(5).fill(0).map((_, i) => 
+          `<span class="star ${i < stars ? 'star-filled' : 'star-empty'}"></span>`
+        ).join('');
+        
+        const card = document.createElement('div');
+        card.className = 'tool-card';
+        card.innerHTML = `
+          <div class="icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#3b82f6">${icons[tool.icon] || icons.Link}</svg>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h3 style="font-weight: 600; color: #111827; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tool.name}</h3>
+            <p style="font-size: 13px; color: #6b7280; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${tool.desc}</p>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                ${starHtml}
+                <span style="font-size: 12px; color: #9ca3af; margin-left: 8px;">${tool.pop}</span>
+              </div>
+              <div class="access-btn" style="display: flex; align-items: center; gap: 4px; color: #3b82f6; opacity: 0; transition: opacity 0.3s;">
+                <span style="font-size: 12px; font-weight: 500;">访问</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          </div>
+        `;
+        card.onclick = () => window.open(tool.url, '_blank');
+        card.onmouseenter = () => {
+          const accessDiv = card.querySelector('.access-btn');
+          if (accessDiv) accessDiv.style.opacity = '1';
+        };
+        card.onmouseleave = () => {
+          const accessDiv = card.querySelector('.access-btn');
+          if (accessDiv) accessDiv.style.opacity = '0';
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCategory(category) {
+      currentCategory = category;
+      
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        if (btn.dataset.category === category) {
+          btn.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
+          btn.style.color = 'white';
+          btn.style.boxShadow = '0 4px 16px rgba(30,64,175,0.3)';
+        } else {
+          const bgMap = { productivity: '#fef3c7', image: '#fce7f3', file: '#dbeafe', life: '#dcfce7', education: '#f3e8ff', design: '#e0e7ff', dev: '#cffafe', entertainment: '#fee2e2' };
+          const colorMap = { productivity: '#d97706', image: '#db2777', file: '#2563eb', life: '#16a34a', education: '#9333ea', design: '#6366f1', dev: '#0891b2', entertainment: '#dc2626' };
+          const cat = btn.dataset.category;
+          btn.style.background = bgMap[cat] || '#f3f4f6';
+          btn.style.color = colorMap[cat] || '#6b7280';
+          btn.style.boxShadow = 'none';
+        }
+      });
+
+      document.getElementById('category-title').textContent = categoryNames[category] || '全部工具';
+      const filtered = tools.filter(t => category === 'all' || t.category === category);
+      document.getElementById('tool-count').textContent = `共找到 ${filtered.length} 个工具`;
+      renderTools(filtered);
+    }
+
+    function handleSearch(query) {
+      searchQuery = query.toLowerCase();
+      const filtered = tools.filter(t => {
+        const matchCat = currentCategory === 'all' || t.category === currentCategory;
+        const matchSearch = !searchQuery || t.name.toLowerCase().includes(searchQuery) || t.desc.toLowerCase().includes(searchQuery);
+        return matchCat && matchSearch;
+      });
+      document.getElementById('tool-count').textContent = `共找到 ${filtered.length} 个工具`;
+      renderTools(filtered);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTools(tools);
+      
+      if (window.innerWidth >= 768) {
+        document.getElementById('desktop-search').style.display = 'block';
+        document.getElementById('mobile-search').style.display = 'none';
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        document.getElementById('desktop-search').style.display = 'block';
+        document.getElementById('mobile-search').style.display = 'none';
+      } else {
+        document.getElementById('desktop-search').style.display = 'none';
+        document.getElementById('mobile-search').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
