@@ -2,697 +2,842 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>生活小工具 - 实用工具导航</title>
-  <meta name="description" content="聚合各类生活小工具，效率工具、图片处理、文件转换、学习教育等，一站式导航服务">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="小森导航 - 黑科技网站资源集，汇聚日常使用的工具网站利器">
+  <title>小森导航 - 黑科技网站资源集</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; background-color: #f9fafb; }
-    .font-display { font-family: 'Playfair Display', serif; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background: #f5f5f5; }
     
-    :root {
-      --primary-50: #eff6ff; --primary-100: #dbeafe; --primary-200: #bfdbfe;
-      --primary-300: #93c5fd; --primary-400: #60a5fa; --primary-500: #3b82f6;
-      --primary-600: #2563eb; --primary-700: #1d4ed8; --primary-800: #1e40af;
-      --primary-900: #1e3a8a;
-      --secondary-50: #f0fdfa; --secondary-100: #ccfbf1; --secondary-200: #99f6e4;
-      --secondary-500: #14b8a6; --secondary-600: #0d9488;
+    .m-header { display: none; }
+    .m-navlist-w { display: none; }
+    @media (max-width: 768px) {
+      .m-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+      .m-header .logo img { height: 36px; }
+      .m-header .navbar { font-size: 24px; color: #333; cursor: pointer; }
+      .m-navlist-w { display: none; position: fixed; top: 56px; left: 0; right: 0; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-height: 70vh; overflow-y: auto; z-index: 99; }
+      .m-navlist { padding: 10px 0; }
+      .m-navlist .list { display: block; padding: 12px 15px; color: #333; text-decoration: none; font-size: 15px; }
+      .m-navlist .list:hover { background: #f8f8f8; }
     }
+
+    .index-nav { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: #2c2c2c; color: #fff; overflow-y: auto; z-index: 50; transition: width 0.3s ease; }
+    .index-nav.collapsed { width: 60px; }
+    .index-nav .logo { padding: 15px 20px; text-align: center; border-bottom: 1px solid #3c3c3c; font-size: 18px; font-weight: bold; }
+    .index-nav.collapsed .logo { font-size: 24px; padding: 10px; }
+    .index-nav .logo img { height: 40px; }
+    .index-nav .type-list { padding: 5px 0; }
+    .index-nav .type-list .list { padding: 12px 15px; cursor: pointer; transition: all 0.3s; position: relative; }
+    .index-nav.collapsed .type-list .list { padding: 12px 10px; text-align: center; }
+    .index-nav .type-list .list:hover { background: #ef7060e0; }
+    .index-nav .type-list .list a { color: #fff; text-decoration: none; font-size: 17px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .index-nav.collapsed .type-list .list a { justify-content: center; }
+    .index-nav.collapsed .type-list .list a span { display: none; }
+    .index-nav .type-list .list a i { margin-right: 6px; width: 18px; text-align: center; font-size: 16px; }
+    .index-nav.collapsed .type-list .list a i { margin-right: 0; font-size: 20px; }
+    .index-nav .type-list .list span { position: absolute; right: 10px; color: #666; }
+    .index-nav .type-list .list:nth-child(n+2) { margin-bottom: 0; }
+    .index-nav .type-list .list[style*="padding-left"] a { font-size: 15px; font-weight: normal; }
+    .index-nav.collapsed .type-list .list[style*="padding-left"] { padding-left: 10px; }
+    @media (max-width: 768px) { .index-nav { display: none; } }
     
-    .bg-gradient-primary { background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); }
-    .bg-gradient-hero { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #f0fdfa 100%); }
-    .text-gradient { background: linear-gradient(135deg, #1e40af, #0d9488); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    
-    header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,255,255,0.8); backdrop-filter: blur(12px);
-      border-bottom: 1px solid #f3f4f6;
-    }
-    
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    .hero-section { padding: 64px 0; }
-    
-    .category-tabs {
-      background: white; border-bottom: 1px solid #f3f4f6;
-      position: sticky; top: 64px; z-index: 40; backdrop-filter: blur(8px);
-      overflow-x: auto; scrollbar-width: none;
-    }
-    .category-tabs::-webkit-scrollbar { display: none; }
-    
-    .category-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 16px; border-radius: 9999px;
-      font-size: 14px; font-weight: 500;
-      transition: all 0.3s ease; cursor: pointer; border: none;
-    }
-    
-    .tools-grid {
-      display: grid; grid-template-columns: repeat(1, 1fr);
-      gap: 20px; padding: 48px 0;
-    }
-    @media (min-width: 640px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { .tools-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 1280px) { .tools-grid { grid-template-columns: repeat(4, 1fr); } }
-    
-    .tool-card {
-      background: white; border-radius: 20px; padding: 20px;
-      border: 1px solid #f3f4f6;
-      transition: all 0.3s ease; cursor: pointer;
-      display: flex; gap: 16px;
-    }
-    .tool-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(30, 64, 175, 0.1);
-      border-color: #dbeafe;
-    }
-    
-    .icon-box {
-      width: 48px; height: 48px; border-radius: 16px;
-      background: linear-gradient(135deg, #eff6ff, #ccfbf1);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    
-    .star { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-    .star-filled { background: #fbbf24; }
-    .star-empty { background: #e5e7eb; }
-    
-    footer { background: #f9fafb; border-top: 1px solid #f3f4f6; padding: 48px 0; margin-top: 48px; }
-    
-    .animate-fade-in { animation: fadeIn 0.5s ease-out; }
-    .animate-slide-up { animation: slideUp 0.6s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .collapse-btn { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; background: #3c3c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; z-index: 10; }
+    .collapse-btn:hover { background: #ef7060; }
+    .collapse-btn i { font-size: 14px; }
+    .index-nav.collapsed .collapse-btn i { transform: rotate(180deg); }
+    .index-nav.collapsed .collapse-btn { right: 50%; transform: translateX(50%); }
+
+    .index-main { margin-left: 220px; padding: 20px; min-height: 100vh; transition: margin-left 0.3s ease; }
+    @media (max-width: 768px) { .index-main { margin-left: 0; padding-top: 70px; } }
+
+    .date-main { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); font-size: 14px; color: #666; }
+    .date-main .times { font-size: 18px; font-weight: 600; color: #333; }
+
+    .site-notice { margin-bottom: 15px; padding: 15px; color: #8d6e63; border: solid 2px #eee; border-radius: 8px; background-color: #fff; font-size: 15px; display: flex; align-items: flex-start; gap: 8px; }
+    .site-notice .fa { color: #ef7060; }
+    .site-notice a { color: #2196F3; text-decoration: none; }
+
+    .site-name { padding: 10px 15px; margin: 10px 0; border-radius: 8px; background: #ef7060; color: #fff; font-size: 18px; font-weight: 600; background-image: linear-gradient(45deg, #ef7060 25%, #f28d80 25%, #f28d80 50%, #ef7060 50%, #ef7060 75%, #f28d80 75%, #f28d80); }
+    .site-name i { margin-right: 8px; }
+
+    .site-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .site-list .list { width: calc(16.666% - 8px); background: #fff; border-radius: 8px; padding: 15px; cursor: pointer; transition: all 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .site-list .list:hover { background: #f18173; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(241,129,115,0.3); }
+    .site-list .list a { text-decoration: none; color: #333; display: block; }
+    .site-list .list .name { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; margin-bottom: 6px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .site-list .list .name img { width: 18px; height: 18px; border-radius: 4px; }
+    .site-list .list .desc { font-size: 12px; color: #666; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .site-list .list:hover .desc { color: rgba(255,255,255,0.8); }
+    .site-list .list:hover .name { color: #fff; }
+    .site-list .kongs { visibility: hidden; }
+
+    @media (max-width: 1200px) { .site-list .list { width: calc(19% - 8px); } }
+    @media (max-width: 1000px) { .site-list .list { width: calc(24% - 8px); } }
+    @media (max-width: 850px) { .site-list .list { width: calc(32% - 7px); } }
+    @media (max-width: 700px) { .site-list .list { width: calc(48% - 5px); } }
+    @media (max-width: 550px) { .site-list .list { width: 100%; } }
+
+    .admin-btn { position: fixed; top: 10px; right: 10px; padding: 8px 16px; background: #ef7060; color: white; border: none; border-radius: 20px; font-size: 14px; cursor: pointer; z-index: 200; display: none; }
+
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; padding: 20px; }
+    .modal { background: #fff; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid #eee; }
+    .modal-header h3 { font-size: 18px; }
+    .modal-close { width: 32px; height: 32px; border: none; background: #f0f0f0; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .modal-body { padding: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #333; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
+    .form-group input:focus, .form-group select:focus { border-color: #ef7060; }
+    .btn-primary { width: 100%; padding: 12px; background: #ef7060; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .btn-secondary { padding: 10px 20px; background: #f0f0f0; color: #333; border: none; border-radius: 8px; cursor: pointer; }
+    .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; }
+    .tab-btn.active { background: #ef7060; color: #fff; }
+    .tab-btn:not(.active) { background: #f0f0f0; color: #666; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .tool-select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; }
+    .btn-group { display: flex; gap: 10px; }
+    .btn-danger { background: #dc3545; color: #fff; }
+    .check-progress { margin-bottom: 15px; }
+    .progress-bar { height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #ef7060; transition: width 0.3s; }
+    .check-result { padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; }
+    .check-success { background: #d4edda; color: #155724; }
+    .check-fail { background: #f8d7da; color: #721c24; }
+    .check-summary { padding: 12px; border-radius: 8px; margin-top: 15px; }
+    .summary-success { background: #d4edda; color: #155724; }
+    .summary-fail { background: #fff3cd; color: #856404; }
+    .export-import-btn { display: flex; gap: 10px; margin-bottom: 20px; }
+    .export-import-btn button { flex: 1; padding: 10px; border: 1px solid #ef7060; border-radius: 8px; color: #ef7060; background: #fff; cursor: pointer; }
+    .update-toast { position: fixed; bottom: 30px; right: 30px; background: #ef7060; color: #fff; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(239, 112, 96, 0.4); font-size: 16px; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out; z-index: 1000; }
+    .update-toast i { font-size: 18px; }
+    @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <div style="display: flex; align-items: center; justify-content: space-between; height: 64px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e40af, #0d9488); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(30,64,175,0.25);">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 14l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-          </div>
-          <span class="font-display text-xl font-semibold text-gradient">生活小工具</span>
-        </div>
-        <div style="flex: 1; max-width: 400px; margin: 0 32px; display: none;" id="desktop-search">
-          <div style="position: relative;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#9ca3af" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="搜索工具..." oninput="handleSearch(this.value)"
-              style="width: 100%; padding: 10px 16px 10px 44px; border-radius: 9999px; border: 1px solid #e5e7eb; background: #f9fafb; outline: none; transition: all 0.3s;"
-              onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)';"
-              onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';"
-            />
-          </div>
-        </div>
-        <button style="padding: 8px 16px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(30,64,175,0.25);">
-          收藏本站
-        </button>
-        <button id="admin-btn" onclick="openModal()" style="display: none; padding: 8px 16px; background: white; color: #3b82f6; border: 1px solid #dbeafe; border-radius: 9999px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; margin-left: 8px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display: inline-block; margin-right: 4px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          管理
-        </button>
-      </div>
-      <div style="padding-bottom: 16px; display: block;" id="mobile-search">
-        <div style="position: relative;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#9ca3af" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="搜索工具..." oninput="handleSearch(this.value)"
-            style="width: 100%; padding: 10px 16px 10px 44px; border-radius: 9999px; border: 1px solid #e5e7eb; background: #f9fafb; outline: none;"
-          />
-        </div>
-      </div>
-    </div>
-  </header>
 
-  <section class="hero-section bg-gradient-hero" style="position: relative; overflow: hidden;">
-    <div style="position: absolute; top: -80px; right: -80px; width: 160px; height: 160px; background: rgba(59,130,246,0.1); border-radius: 50%; filter: blur(60px);"></div>
-    <div style="position: absolute; bottom: -80px; left: -80px; width: 160px; height: 160px; background: rgba(13,148,136,0.1); border-radius: 50%; filter: blur(60px);"></div>
-    <div class="container" style="position: relative;">
-      <div style="text-align: center; max-width: 900px; margin: 0 auto;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(255,255,255,0.8); border-radius: 9999px; border: 1px solid #f3f4f6; margin-bottom: 24px; animation: fadeIn 0.5s ease-out;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <span style="font-size: 14px; color: #4b5563;">发现更多实用工具</span>
-        </div>
-        <h1 class="font-display text-4xl md:text-5xl font-bold text-gray-900 mb-8 animate-slide-up" style="line-height: 1.2;">
-          你的<span class="text-gradient">生活</span><br/>
-          效率<span class="text-gradient">好帮手</span>
-        </h1>
-        <p style="font-size: 18px; color: #6b7280; margin-bottom: 32px; line-height: 1.6;" class="animate-slide-up" style="animation-delay: 0.2s;">
-          聚合各类实用工具，涵盖效率、设计、学习、娱乐等多个领域<br/>
-          一站式导航，让你的生活更便捷
-        </p>
-        <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;" class="animate-slide-up" style="animation-delay: 0.4s;">
-          <a href="#tools" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 32px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border-radius: 9999px; font-weight: 500; text-decoration: none; box-shadow: 0 8px 24px rgba(30,64,175,0.3); transition: all 0.3s;">
-            浏览工具
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
+  <div class="index-nav" id="index-nav">
+    <div class="collapse-btn" onclick="toggleNavCollapse()">
+      <i class="fa fa-chevron-left"></i>
     </div>
-  </section>
-
-  <div class="category-tabs">
-    <div class="container">
-      <div style="display: flex; gap: 8px; padding: 16px 0;">
-        <button class="category-btn active" data-category="all" onclick="filterCategory('all')" style="background: linear-gradient(135deg, #1e40af, #2563eb); color: white; box-shadow: 0 4px 16px rgba(30,64,175,0.3);">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          全部
-        </button>
-        <button class="category-btn" data-category="productivity" onclick="filterCategory('productivity')" style="background: #fef3c7; color: #d97706;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          效率工具
-        </button>
-        <button class="category-btn" data-category="image" onclick="filterCategory('image')" style="background: #fce7f3; color: #db2777;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          图片处理
-        </button>
-        <button class="category-btn" data-category="file" onclick="filterCategory('file')" style="background: #dbeafe; color: #2563eb;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-          文件转换
-        </button>
-        <button class="category-btn" data-category="life" onclick="filterCategory('life')" style="background: #dcfce7; color: #16a34a;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          生活服务
-        </button>
-        <button class="category-btn" data-category="education" onclick="filterCategory('education')" style="background: #f3e8ff; color: #9333ea;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-          学习教育
-        </button>
-        <button class="category-btn" data-category="design" onclick="filterCategory('design')" style="background: #e0e7ff; color: #6366f1;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          设计工具
-        </button>
-        <button class="category-btn" data-category="dev" onclick="filterCategory('dev')" style="background: #cffafe; color: #0891b2;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-          编程开发
-        </button>
-        <button class="category-btn" data-category="entertainment" onclick="filterCategory('entertainment')" style="background: #fee2e2; color: #dc2626;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          娱乐休闲
-        </button>
-      </div>
-    </div>
+    <div class="logo">小森导航</div>
+    <div class="type-list" id="type-list"></div>
   </div>
 
-  <section id="tools" class="container">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px;">
-      <div>
-        <h2 class="font-display text-2xl md:text-3xl font-bold text-gray-900" id="category-title">全部工具</h2>
-        <p style="color: #6b7280; margin-top: 8px;" id="tool-count">共找到 43 个工具</p>
-      </div>
-      <div style="display: none; align-items: center; gap: 8px; font-size: 14px; color: #6b7280;">
-        <span style="padding: 6px 12px; background: #eff6ff; color: #2563eb; border-radius: 9999px;">热门推荐</span>
-      </div>
-    </div>
-    <div class="tools-grid" id="tools-grid">
-      <!-- Tools will be dynamically inserted here -->
-    </div>
-  </section>
+  <div class="m-header">
+    <div class="navbar" onclick="toggleMobileNav()"><i class="fa fa-bars"></i></div>
+    <div class="logo">小森导航</div>
+    <div></div>
+  </div>
+  <div class="m-navlist-w" id="m-navlist-w">
+    <div class="m-navlist" id="m-navlist"></div>
+  </div>
 
-  <footer>
-    <div class="container">
-      <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 32px;">
-        <div>
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e40af, #0d9488); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 14l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-            </div>
-            <span class="font-display text-xl font-semibold text-gray-900">生活小工具</span>
-          </div>
-          <p style="color: #6b7280; margin-bottom: 16px; max-width: 400px;">
-            聚合各类实用工具，涵盖效率、设计、学习、娱乐等多个领域，一站式导航服务，让你的生活更便捷。
-          </p>
-        </div>
-        <div>
-          <h3 style="font-weight: 600; margin-bottom: 16px;">快速链接</h3>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">关于我们</a></li>
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">联系我们</a></li>
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">隐私政策</a></li>
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">使用条款</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 style="font-weight: 600; margin-bottom: 16px;">工具分类</h3>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">效率工具</a></li>
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">设计工具</a></li>
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">学习教育</a></li>
-            <li><a href="#" style="color: #6b7280; text-decoration: none;">生活服务</a></li>
-          </ul>
-        </div>
-      </div>
-      <div style="border-top: 1px solid #e5e7eb; margin-top: 32px; padding-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-        <p style="color: #6b7280; font-size: 14px;">© 2024 生活小工具. 保留所有权利.</p>
-        <p style="color: #6b7280; font-size: 14px;">用 ❤️ 打造</p>
-      </div>
+  <div class="index-main">
+    <div class="date-main">
+      <time class="times" id="nowTime">00:00:00</time>
+      <span class="dates" id="nowYmd">2026年07月05日</span>
+      <span class="lunars" id="nowLunar">农历五月十八</span>
+      <span class="weeks" id="nowWeek">星期六</span>
     </div>
-  </footer>
 
-  <div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 24px;">
-    <div style="background: white; border-radius: 20px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;">
-      <div style="display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid #f3f4f6;">
-        <h3 style="font-size: 18px; font-weight: 600; color: #111827;" id="modal-title">管理工具</h3>
-        <button onclick="closeModal()" style="width: 32px; height: 32px; border: none; background: #f3f4f6; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#6b7280"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
+    <div class="site-main" id="site-main"></div>
+  </div>
+
+  <button class="admin-btn" id="admin-btn" onclick="openModal()">管理</button>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>管理工具</h3>
+        <button class="modal-close" onclick="closeModal()"><i class="fa fa-times"></i></button>
       </div>
-      <div style="padding: 24px;">
-        <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-          <div style="display: flex; align-items: flex-start; gap: 10px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#d97706" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            <div style="font-size: 13px; color: #92400e;">
-              <p style="font-weight: 600; margin-bottom: 4px;">数据同步说明</p>
-              <p>网站数据存储在 <strong>tools.json</strong> 文件中。添加/编辑/删除工具后，点击「导出数据」下载最新文件，上传到 GitHub 即可同步到网站。</p>
+      <div class="modal-body">
+        <div class="tab-buttons">
+          <button class="tab-btn active" onclick="switchTab('add')">添加工具</button>
+          <button class="tab-btn" onclick="switchTab('edit')">编辑工具</button>
+          <button class="tab-btn" onclick="switchTab('category')">添加分类</button>
+          <button class="tab-btn" onclick="switchTab('check')">检测网站</button>
+        </div>
+        <div class="export-import-btn">
+          <button onclick="exportTools()">导出数据</button>
+          <button onclick="importTools()">导入数据</button>
+          <button onclick="refreshFromFile()">从文件刷新</button>
+        </div>
+        
+        <div class="tab-content active" id="tab-add">
+          <div class="form-group"><label>工具名称</label><input type="text" id="input-name" placeholder="请输入工具名称"></div>
+          <div class="form-group"><label>工具描述</label><input type="text" id="input-desc" placeholder="请输入工具描述"></div>
+          <div class="form-group"><label>网站链接</label><input type="text" id="input-url" placeholder="请输入网站链接" oninput="updateIconPreview('input')"></div>
+          <div class="form-group"><label>分类</label><select id="input-category"></select></div>
+          <div class="form-group">
+            <label>图标设置</label>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div id="icon-preview-input" style="width:40px;height:40px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="" style="width:100%;height:100%;object-fit:cover;"></div>
+              <div style="flex:1;">
+                <input type="text" id="input-icon" placeholder="留空自动获取网站图标，或输入图标URL">
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="addTool()">添加工具</button>
+        </div>
+        
+        <div class="tab-content" id="tab-edit">
+          <select class="tool-select" id="edit-tool-select" onchange="loadToolForEdit()"><option value="">请选择工具</option></select>
+          <div id="edit-form" style="display:none;">
+            <div class="form-group"><label>工具名称</label><input type="text" id="edit-name"></div>
+            <div class="form-group"><label>工具描述</label><input type="text" id="edit-desc"></div>
+            <div class="form-group"><label>网站链接</label><input type="text" id="edit-url" oninput="updateIconPreview('edit')"></div>
+            <div class="form-group"><label>分类</label><select id="edit-category"></select></div>
+            <div class="form-group">
+              <label>图标设置</label>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div id="icon-preview-edit" style="width:40px;height:40px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="" style="width:100%;height:100%;object-fit:cover;"></div>
+                <div style="flex:1;">
+                  <input type="text" id="edit-icon" placeholder="留空自动获取网站图标，或输入图标URL">
+                </div>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button class="btn-primary" onclick="updateTool()">保存修改</button>
+              <button class="btn-primary btn-danger" onclick="deleteTool()">删除工具</button>
             </div>
           </div>
         </div>
         
-        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-          <button onclick="switchTab('add')" id="tab-add" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; cursor: pointer;">添加工具</button>
-          <button onclick="switchTab('edit')" id="tab-edit" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: #f3f4f6; color: #6b7280; cursor: pointer;">编辑工具</button>
-          <button onclick="switchTab('check')" id="tab-check" style="flex: 1; padding: 10px; border: none; border-radius: 12px; font-weight: 500; background: #f3f4f6; color: #6b7280; cursor: pointer;">检测网站</button>
-        </div>
-        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-          <button onclick="exportTools()" style="flex: 1; padding: 10px; border: 1px solid #dbeafe; border-radius: 12px; font-weight: 500; background: white; color: #3b82f6; cursor: pointer;">导出数据</button>
-          <button onclick="importTools()" style="flex: 1; padding: 10px; border: 1px solid #dbeafe; border-radius: 12px; font-weight: 500; background: white; color: #3b82f6; cursor: pointer;">导入数据</button>
-        </div>
-        
-        <div id="tab-add-content">
-          <div style="display: flex; flex-direction: column; gap: 16px;">
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具名称</label>
-              <input type="text" id="input-name" placeholder="请输入工具名称" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具描述</label>
-              <input type="text" id="input-desc" placeholder="请输入工具描述" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">网站链接</label>
-              <input type="text" id="input-url" placeholder="请输入网站链接" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">分类</label>
-              <select id="input-category" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-                <option value="productivity">效率工具</option>
-                <option value="image">图片处理</option>
-                <option value="file">文件转换</option>
-                <option value="life">生活服务</option>
-                <option value="education">学习教育</option>
-                <option value="design">设计工具</option>
-                <option value="dev">编程开发</option>
-                <option value="entertainment">娱乐休闲</option>
-              </select>
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">图标</label>
-              <select id="input-icon" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-                <option value="Languages">语言</option>
-                <option value="QrCode">二维码</option>
-                <option value="Clock">时钟</option>
-                <option value="CheckSquare">待办</option>
-                <option value="StickyNote">笔记</option>
-                <option value="FileText">文件</option>
-                <option value="Compress">压缩</option>
-                <option value="Crop">裁剪</option>
-                <option value="Film">视频</option>
-                <option value="Wand2">魔法棒</option>
-                <option value="Layers">图层</option>
-                <option value="Icons">图标</option>
-                <option value="FileDown">下载</option>
-                <option value="Video">影片</option>
-                <option value="Music">音乐</option>
-                <option value="Archive">归档</option>
-                <option value="Table">表格</option>
-                <option value="CloudSun">天气</option>
-                <option value="Truck">快递</option>
-                <option value="Calendar">日历</option>
-                <option value="Calculator">计算器</option>
-                <option value="Wallet">钱包</option>
-                <option value="ChefHat">厨师</option>
-                <option value="BookOpen">书本</option>
-                <option value="BookText">书籍</option>
-                <option value="Search">搜索</option>
-                <option value="GitBranch">分支</option>
-                <option value="SpellCheck">拼写</option>
-                <option value="PenTool">画笔</option>
-                <option value="Palette">调色板</option>
-                <option value="Type">字体</option>
-                <option value="Brand">品牌</option>
-                <option value="Box">盒子</option>
-                <option value="Code2">代码</option>
-                <option value="Terminal">终端</option>
-                <option value="Send">发送</option>
-                <option value="Hash">哈希</option>
-                <option value="Braces">括号</option>
-                <option value="GitCommit">提交</option>
-                <option value="Gamepad">游戏</option>
-                <option value="Headphones">耳机</option>
-                <option value="Smile">笑脸</option>
-              </select>
-            </div>
-            <button onclick="addTool()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 8px;">添加工具</button>
-          </div>
-        </div>
-        
-        <div id="tab-edit-content" style="display: none;">
-          <div style="margin-bottom: 16px;">
-            <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">选择要编辑的工具</label>
-            <select id="edit-tool-select" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onchange="loadToolForEdit()" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-              <option value="">请选择工具</option>
+        <div class="tab-content" id="tab-category">
+          <div class="form-group"><label>分类名称</label><input type="text" id="input-category-name" placeholder="请输入分类名称"></div>
+          <div class="form-group"><label>分类图标</label>
+            <select id="input-category-icon">
+              <option value="fa-heart">❤️ 心形</option>
+              <option value="fa-thumbs-o-up">👍 点赞</option>
+              <option value="fa-rocket">🚀 火箭</option>
+              <option value="fa-search">🔍 搜索</option>
+              <option value="fa-smile-o">😊 笑脸</option>
+              <option value="fa-laptop">💻 电脑</option>
+              <option value="fa-graduation-cap">🎓 毕业帽</option>
+              <option value="fa-gamepad">🎮 游戏</option>
+              <option value="fa-book">📚 书籍</option>
+              <option value="fa-music">🎵 音乐</option>
+              <option value="fa-video-camera">📹 视频</option>
+              <option value="fa-picture-o">🖼️ 图片</option>
+              <option value="fa-download">⬇️ 下载</option>
+              <option value="fa-star">⭐ 星星</option>
+              <option value="fa-globe">🌍 地球</option>
+              <option value="fa-wrench">🔧 工具</option>
             </select>
           </div>
-          <div id="edit-form" style="display: none; flex-direction: column; gap: 16px;">
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具名称</label>
-              <input type="text" id="edit-name" placeholder="请输入工具名称" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">工具描述</label>
-              <input type="text" id="edit-desc" placeholder="请输入工具描述" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">网站链接</label>
-              <input type="text" id="edit-url" placeholder="请输入网站链接" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">分类</label>
-              <select id="edit-category" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-                <option value="productivity">效率工具</option>
-                <option value="image">图片处理</option>
-                <option value="file">文件转换</option>
-                <option value="life">生活服务</option>
-                <option value="education">学习教育</option>
-                <option value="design">设计工具</option>
-                <option value="dev">编程开发</option>
-                <option value="entertainment">娱乐休闲</option>
-              </select>
-            </div>
-            <div>
-              <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">图标</label>
-              <select id="edit-icon" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; outline: none; background: white;" onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'">
-                <option value="Languages">语言</option>
-                <option value="QrCode">二维码</option>
-                <option value="Clock">时钟</option>
-                <option value="CheckSquare">待办</option>
-                <option value="StickyNote">笔记</option>
-                <option value="FileText">文件</option>
-                <option value="Compress">压缩</option>
-                <option value="Crop">裁剪</option>
-                <option value="Film">视频</option>
-                <option value="Wand2">魔法棒</option>
-                <option value="Layers">图层</option>
-                <option value="Icons">图标</option>
-                <option value="FileDown">下载</option>
-                <option value="Video">影片</option>
-                <option value="Music">音乐</option>
-                <option value="Archive">归档</option>
-                <option value="Table">表格</option>
-                <option value="CloudSun">天气</option>
-                <option value="Truck">快递</option>
-                <option value="Calendar">日历</option>
-                <option value="Calculator">计算器</option>
-                <option value="Wallet">钱包</option>
-                <option value="ChefHat">厨师</option>
-                <option value="BookOpen">书本</option>
-                <option value="BookText">书籍</option>
-                <option value="Search">搜索</option>
-                <option value="GitBranch">分支</option>
-                <option value="SpellCheck">拼写</option>
-                <option value="PenTool">画笔</option>
-                <option value="Palette">调色板</option>
-                <option value="Type">字体</option>
-                <option value="Brand">品牌</option>
-                <option value="Box">盒子</option>
-                <option value="Code2">代码</option>
-                <option value="Terminal">终端</option>
-                <option value="Send">发送</option>
-                <option value="Hash">哈希</option>
-                <option value="Braces">括号</option>
-                <option value="GitCommit">提交</option>
-                <option value="Gamepad">游戏</option>
-                <option value="Headphones">耳机</option>
-                <option value="Smile">笑脸</option>
-              </select>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button onclick="updateTool()" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">保存修改</button>
-              <button onclick="deleteTool()" style="flex: 1; padding: 14px; background: #fee2e2; color: #dc2626; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">删除工具</button>
-            </div>
-          </div>
+          <div class="form-group"><label>父分类（可选）</label><select id="input-parent-category"></select></div>
+          <button class="btn-primary" onclick="addCategory()">添加分类</button>
         </div>
         
-        <div id="tab-check-content" style="display: none;">
-          <div style="margin-bottom: 16px;">
-            <button onclick="checkAllSites()" id="check-all-btn" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #1e40af, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">开始检测所有网站</button>
-          </div>
-          <div id="check-progress" style="display: none; margin-bottom: 16px;">
-            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
-              <span style="color: #374151;">检测进度</span>
-              <span style="color: #3b82f6; font-weight: 500;" id="progress-text">0/0</span>
+        <div class="tab-content" id="tab-check">
+          <button class="btn-primary" onclick="checkAllSites()" id="check-btn">开始检测所有网站</button>
+          <div class="check-progress" id="check-progress" style="display:none;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span>检测进度</span>
+              <span id="progress-text">0/0</span>
             </div>
-            <div style="height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden;">
-              <div id="progress-bar" style="height: 100%; background: linear-gradient(135deg, #1e40af, #2563eb); width: 0%; transition: width 0.3s;"></div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
           </div>
-          <div id="check-results" style="max-height: 400px; overflow-y: auto;">
-          </div>
+          <div id="check-results"></div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    let tools = [];
-    
-    const defaultTools = [
-      { id: '1', name: '在线翻译', desc: '支持多语言互译，精准翻译', url: 'https://translate.google.com', category: 'productivity', icon: 'Languages', pop: 98 },
-      { id: '2', name: '二维码生成', desc: '快速生成二维码，支持自定义', url: 'https://www.qr-code-scanner.com/qr-code-generator/', category: 'productivity', icon: 'QrCode', pop: 95 },
-      { id: '3', name: '在线时钟', desc: '精美的在线时钟，支持世界时间', url: 'https://www.timeanddate.com/worldclock/', category: 'productivity', icon: 'Clock', pop: 92 },
-      { id: '4', name: '待办清单', desc: '简洁高效的待办事项管理', url: 'https://todo.microsoft.com', category: 'productivity', icon: 'CheckSquare', pop: 88 },
-      { id: '5', name: '笔记工具', desc: '云端笔记，随时随地记录', url: 'https://keep.google.com', category: 'productivity', icon: 'StickyNote', pop: 85 },
-      { id: '6', name: 'Markdown编辑器', desc: '在线Markdown编写和预览', url: 'https://markdownlivepreview.com/', category: 'productivity', icon: 'FileText', pop: 82 },
-      { id: '7', name: '图片压缩', desc: '无损压缩图片，快速减小体积', url: 'https://tinypng.com', category: 'image', icon: 'Compress', pop: 96 },
-      { id: '8', name: '图片裁剪', desc: '在线裁剪图片，支持多种比例', url: 'https://www.canva.com', category: 'image', icon: 'Crop', pop: 93 },
-      { id: '9', name: 'GIF制作', desc: '将视频转换为GIF动图', url: 'https://giphy.com/create/gifmaker', category: 'image', icon: 'Film', pop: 90 },
-      { id: '10', name: '图片去水印', desc: '智能去除图片水印', url: 'https://www.pixlr.com', category: 'image', icon: 'Wand2', pop: 86 },
-      { id: '11', name: '图片合成', desc: '在线图片合成与编辑', url: 'https://www.fotor.com', category: 'image', icon: 'Layers', pop: 83 },
-      { id: '12', name: '图标搜索', desc: '海量图标资源搜索下载', url: 'https://www.flaticon.com', category: 'image', icon: 'Icons', pop: 80 },
-      { id: '13', name: 'PDF转换', desc: 'PDF与Word互转，支持多种格式', url: 'https://smallpdf.com', category: 'file', icon: 'FileDown', pop: 97 },
-      { id: '14', name: '视频转换', desc: '视频格式转换，支持多种编码', url: 'https://www.online-convert.com', category: 'file', icon: 'Video', pop: 91 },
-      { id: '15', name: '音频转换', desc: '音频格式转换，免费无限制', url: 'https://cloudconvert.com', category: 'file', icon: 'Music', pop: 87 },
-      { id: '16', name: '文件压缩', desc: '在线压缩解压文件', url: 'https://www.zip-online.com', category: 'file', icon: 'Archive', pop: 84 },
-      { id: '17', name: 'Excel转表格', desc: '在线Excel查看和转换', url: 'https://www.spreadsheetconverter.com', category: 'file', icon: 'Table', pop: 79 },
-      { id: '18', name: '天气预报', desc: '全球天气预报，精准可靠', url: 'https://www.weather.com', category: 'life', icon: 'CloudSun', pop: 99 },
-      { id: '19', name: '快递查询', desc: '一键查询快递物流信息', url: 'https://www.kuaidi100.com', category: 'life', icon: 'Truck', pop: 94 },
-      { id: '20', name: '万年历', desc: '黄历查询，节气节日', url: 'https://www.nongli.cn', category: 'life', icon: 'Calendar', pop: 89 },
-      { id: '21', name: '计算器', desc: '科学计算器，功能强大', url: 'https://www.calculator.net', category: 'life', icon: 'Calculator', pop: 85 },
-      { id: '22', name: '汇率换算', desc: '实时汇率，快速换算', url: 'https://www.xe.com', category: 'life', icon: 'Wallet', pop: 81 },
-      { id: '23', name: '菜谱大全', desc: '海量菜谱，轻松学做菜', url: 'https://www.xiachufang.com', category: 'life', icon: 'ChefHat', pop: 78 },
-      { id: '24', name: '在线学习', desc: '海量课程，随时随地学习', url: 'https://www.coursera.org', category: 'education', icon: 'BookOpen', pop: 96 },
-      { id: '25', name: '单词背诵', desc: '高效背单词，轻松记忆', url: 'https://www.ankiweb.net', category: 'education', icon: 'BookText', pop: 92 },
-      { id: '26', name: '文献搜索', desc: '学术文献搜索下载', url: 'https://scholar.google.com', category: 'education', icon: 'Search', pop: 88 },
-      { id: '27', name: '思维导图', desc: '在线制作思维导图', url: 'https://www.mindmeister.com', category: 'education', icon: 'GitBranch', pop: 84 },
-      { id: '28', name: '语法检查', desc: '英文语法检查和校对', url: 'https://www.grammarly.com', category: 'education', icon: 'SpellCheck', pop: 80 },
-      { id: '29', name: 'UI设计', desc: '在线UI设计工具', url: 'https://www.figma.com', category: 'design', icon: 'PenTool', pop: 95 },
-      { id: '30', name: '配色方案', desc: '专业配色方案生成器', url: 'https://coolors.co', category: 'design', icon: 'Palette', pop: 90 },
-      { id: '31', name: '字体预览', desc: '在线字体预览和下载', url: 'https://fonts.google.com', category: 'design', icon: 'Type', pop: 86 },
-      { id: '32', name: 'Logo设计', desc: '智能Logo设计生成', url: 'https://www.logo.com', category: 'design', icon: 'Brand', pop: 82 },
-      { id: '33', name: '原型设计', desc: '快速制作产品原型', url: 'https://www.axure.com', category: 'design', icon: 'Box', pop: 77 },
-      { id: '34', name: '代码格式化', desc: '代码格式化和美化', url: 'https://prettier.io/playground', category: 'dev', icon: 'Code2', pop: 93 },
-      { id: '35', name: '在线IDE', desc: '浏览器端代码编辑器', url: 'https://replit.com', category: 'dev', icon: 'Terminal', pop: 89 },
-      { id: '36', name: 'API测试', desc: 'API接口测试工具', url: 'https://www.postman.com', category: 'dev', icon: 'Send', pop: 85 },
-      { id: '37', name: '正则测试', desc: '正则表达式测试工具', url: 'https://regex101.com', category: 'dev', icon: 'Hash', pop: 81 },
-      { id: '38', name: 'JSON解析', desc: 'JSON在线解析和格式化', url: 'https://jsonlint.com', category: 'dev', icon: 'Braces', pop: 78 },
-      { id: '39', name: 'Git教程', desc: 'Git版本控制学习', url: 'https://try.github.io', category: 'dev', icon: 'GitCommit', pop: 74 },
-      { id: '40', name: '小游戏', desc: '休闲益智小游戏', url: 'https://www.crazygames.com', category: 'entertainment', icon: 'Gamepad', pop: 91 },
-      { id: '41', name: '影视推荐', desc: '影视评分和推荐', url: 'https://www.douban.com', category: 'entertainment', icon: 'Film', pop: 87 },
-      { id: '42', name: '音乐播放器', desc: '在线音乐播放', url: 'https://music.163.com', category: 'entertainment', icon: 'Headphones', pop: 83 },
-      { id: '43', name: '笑话大全', desc: '海量笑话，开心每一天', url: 'https://www.qiushibaike.com', category: 'entertainment', icon: 'Smile', pop: 79 },
+    let categories = [
+      { id: 'hot', name: '热门必备', icon: 'fa-heart', children: [] },
+      { id: 'tools', name: '实用工具', icon: 'fa-thumbs-o-up', children: [] },
+      { id: 'tech', name: '科技酷站', icon: 'fa-rocket', children: [] },
+      { id: 'search', name: '资源搜索', icon: 'fa-search', children: [
+        { id: 'academic', name: '学术搜索' },
+        { id: 'pan', name: '网盘搜索' },
+        { id: 'image', name: '以图搜图' },
+        { id: 'ebook', name: '电子书搜索' },
+        { id: 'wallpaper', name: '壁纸美图' },
+        { id: 'material', name: '素材资源' }
+      ]},
+      { id: 'anime', name: '动漫影视', icon: 'fa-smile-o', children: [
+        { id: 'online-anime', name: '在线动漫' },
+        { id: 'tv', name: '影视追剧' },
+        { id: 'comic', name: '漫画阅读' },
+        { id: 'novel', name: '看轻小说' }
+      ]},
+      { id: 'software', name: '软件资源', icon: 'fa-laptop', children: [
+        { id: 'soft-download', name: '软件下载' },
+        { id: 'extension', name: '扩展安装' },
+        { id: 'install', name: '装机必备' }
+      ]},
+      { id: 'study', name: '学习提升', icon: 'fa-graduation-cap', children: [
+        { id: 'online-study', name: '在线学习' },
+        { id: 'dev', name: '编程开发' }
+      ]},
+      { id: 'game', name: '游戏娱乐', icon: 'fa-gamepad', children: [
+        { id: 'online-game', name: '在线游戏' },
+        { id: 'fun', name: '趣味休闲' }
+      ]}
     ];
 
-    const icons = {
-      Languages: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
-      QrCode: '<path d="M3 9h8V3H3v6zm0 12h8v-6H3v6zm10 0h8v-6h-8v6zm0-18v6h8V3h-8z"/>',
-      Clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-      CheckSquare: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>',
-      StickyNote: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm0-4H7v-2h7v2zm-3-5V3.5L18.5 9H13z"/>',
-      FileText: '<path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>',
-      Compress: '<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>',
-      Crop: '<path d="M17 15h2V7c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h8v-2zM7 7h10v10H7V7z"/>',
-      Film: '<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',
-      Wand2: '<path d="M15.29 4.71L14 6l2 2 1.29-1.29-2-2zM6 14l-2 2 1.29 1.29 2-2-1.29-1.29zM4 4h4v4H4V4zm16 16h-4v-4h4v4zM6 18H4v-4h2v4zm12-10h2V6h-2v2zM10 14H8v4h2v-4zm6-8h-4V4h4v2zm-4 10h4v4h-4v-4z"/>',
-      Layers: '<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.37 5.74zM12 16l-8.06-6.04L12 4l8.06 6.04L12 16z"/>',
-      Icons: '<path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>',
-      FileDown: '<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>',
-      Video: '<path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>',
-      Music: '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>',
-      Archive: '<path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.15.55l-1.39 1.68C3.21 5.79 3 6.32 3 6.9V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.9c0-.58-.21-1.11-.54-1.67zM12 17.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zm3.5-9l-3.5 4h-2l3.5-4h2z"/>',
-      Table: '<path d="M10 18h4v-2h-4v2zM3 6v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm16-4H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>',
-      CloudSun: '<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>',
-      Truck: '<path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>',
-      Calendar: '<path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>',
-      Calculator: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>',
-      Wallet: '<path d="M17 6H7c-1.1 0-1.99.9-1.99 2L5 18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H7V8h10v10zm-3-5c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/>',
-      ChefHat: '<path d="M12 3L3 9v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9l-9-6zm3.66 6l1.44 4H7l1.44-4h7.22z"/>',
-      BookOpen: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-      BookText: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-      Search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-      GitBranch: '<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>',
-      SpellCheck: '<path d="M12.73 14.73L7 20.46l-1.41-1.41L12.73 12l6.73 6.73-1.41 1.41zM15.5 4l-1.41-1.41C12.48 1.25 11.34 1 11 1H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4.5c0-.83-.38-1.58-1-2.09L18 5.91V16h-2V4h1.5z"/>',
-      PenTool: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-      Palette: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-      Type: '<path d="M14.5 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V7.5L14.5 2zm-2 16H8v-2h4.5v2zm0-4H8v-2h4.5v2zm0-4H8V8h4.5v2zm6 8H17v-2h1.5v2zm0-4H17v-2h1.5v2zm0-4H17V8h1.5v2z"/>',
-      Brand: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-      Box: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>',
-      Code2: '<path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>',
-      Terminal: '<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6v-2zm0 4h8v2H6v-2zm10 0h2v2h-2v-2zm-6-4h8v2h-8v-2z"/>',
-      Send: '<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>',
-      Hash: '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>',
-      Braces: '<path d="M18 7h-5v4h-2V7H6v10h5v-4h2v4h5V7zm-2 8h-2V9h2v6z"/>',
-      GitCommit: '<circle cx="12" cy="12" r="3"/><path d="M19 12c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.93 0 3.68-.79 4.94-2.06l1.42 1.42C17.69 19.53 14.92 21 12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9z"/>',
-      Gamepad: '<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>',
-      Headphones: '<path d="M12 3a9 9 0 0 0-9 9v6a9 9 0 0 0 18 0v-6a9 9 0 0 0-9-9zm0 16a7 7 0 0 1-7-7v-1h3v8h2v-6h2v6h2v-8h3v1a7 7 0 0 1-7 7z"/>',
-      Smile: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-    };
+    let tools = [];
+    const defaultTools = [
+      { id: '1', name: '豆包免费AI助手', desc: '最好用的全能AI助手', url: 'https://doubao.paluai.com/?code=dh61', category: 'hot' },
+      { id: '2', name: 'LibTV', desc: '专业AI视频创作工具，支持Seedance 2.0', url: 'https://libtv.cgref.cn/s/xpn8352ezw', category: 'hot' },
+      { id: '3', name: 'AI工具大全', desc: '在线AI工具+海量模版素材', url: 'https://www.gaoding.com/utms/826e8873ef5b41289dab4bb92b68204d', category: 'hot' },
+      { id: '4', name: '精选资源分享', desc: '精选软件壁纸打包下载', url: 'https://pan.quark.cn/s/3666fd527b13', category: 'hot' },
+      { id: '5', name: 'NO视频', desc: '免费高清影视剧', url: 'https://www.novipnoad.xyz/', category: 'hot' },
+      { id: '6', name: '次元城动画', desc: '高清新番动漫', url: 'https://www.cycani.org', category: 'hot' },
+      { id: '7', name: '一起听歌吧', desc: '在线听歌房', url: 'https://music.alang.run/', category: 'hot' },
+      { id: '8', name: '今日热榜', desc: '一站看完全网热榜消息', url: 'https://tophub.today/', category: 'hot' },
+      { id: '9', name: 'Poki在线小游戏', desc: '上千款免费小游戏', url: 'https://poki.com/zh', category: 'hot' },
+      { id: '10', name: '千帆搜索', desc: '聚合网盘搜索引擎', url: 'https://pan.qianfan.app/', category: 'hot' },
+      { id: '11', name: '飞库文学网', desc: '精品电子书', url: 'https://www.feiku6.com/', category: 'hot' },
+      { id: '12', name: 'AstronClaw智能助手', desc: '讯飞小龙虾，24h在线全能AI助手', url: 'https://agent.xfyun.cn/astron-claw?utm=cg&cgv=09we2dgngo', category: 'hot' },
+      { id: '13', name: '拾光壁纸', desc: '24个高清壁纸图库', url: 'https://snake.timeline.ink/home', category: 'hot' },
+      { id: '14', name: '数码荔枝软件商店', desc: '最新鲜优秀的正版软件平台', url: 'https://lizhi.shop/?cid=2yj7gln9', category: 'hot' },
+      { id: '15', name: '正版 Windows', desc: '正版 Win10 家庭版/专业版', url: 'https://lizhi.shop/products/windows-10?cid=2yj7gln9', category: 'hot' },
+      { id: '16', name: 'TRAE-AI编程', desc: 'AI辅助编程，代码自动修复', url: 'https://www.trae.com.cn/?utm_source=advertising&utm_medium=qinight_ug_cpa&utm_term=hw_trae_qinight', category: 'hot' },
+      { id: '17', name: 'iSlide AIPPT', desc: '输入主题，一键生成PPT', url: 'https://www.islide.cc/landing?utm=cg&cgv=l3mnzp7ko1', category: 'hot' },
+      { id: '18', name: 'SpeedAI科研小助手', desc: 'AIGC检测、降重降AI工具', url: 'https://speedai.com/?utm=cg&cgv=8qmno56k29', category: 'hot' },
+      { id: '19', name: 'LiblibAI', desc: '中国领先的AI创作平台', url: 'https://liblib.cgref.cn/s/j7n6q5yk1g', category: 'hot' },
+      { id: '20', name: 'Seko短剧创作平台', desc: 'AI短剧创作工具', url: 'https://seko.cgref.cn/s/rpe3ldje05', category: 'hot' },
+      { id: '21', name: '全能AI工具箱', desc: '在线全能AI工具大全', url: 'https://www.gaoding.com/utms/ec4ee3bb95cb4a1d8c08ba9cb4392cf0', category: 'tools' },
+      { id: '22', name: '在线PS', desc: '网页版免费 Photoshop', url: 'https://www.gaoding.com/utms/bd63a6b8f6674b03b4badfab890c9054', category: 'tools' },
+      { id: '23', name: 'PDF24 Tools', desc: '完全免费的PDF工具箱', url: 'https://tools.pdf24.org/zh/', category: 'tools' },
+      { id: '24', name: '免费在线AI抠图', desc: 'AI智能抠图/替换图片背景', url: 'https://www.koukoutu.com/removebgtool/all?v=xhpt.AI', category: 'tools' },
+      { id: '25', name: 'OCR图片文字识别', desc: '在线OCR文字识别', url: 'https://web.baimiaoapp.com/', category: 'tools' },
+      { id: '26', name: 'waifu2x', desc: '图片无损放大', url: 'http://waifu2x.udp.jp/', category: 'tools' },
+      { id: '27', name: 'DeepL翻译', desc: '最强在线翻译工具', url: 'https://www.deepl.com/translator', category: 'tools' },
+      { id: '28', name: 'TinyPNG', desc: '图片压缩利器', url: 'https://tinypng.com/', category: 'tools' },
+      { id: '29', name: 'GIF编辑器', desc: '全能GIF编辑制作工具', url: 'https://ezgif.com/', category: 'tools' },
+      { id: '30', name: '草料二维码', desc: '二维码制作解析工具', url: 'https://cli.im/', category: 'tools' },
+      { id: '31', name: 'Aconvert', desc: '免费文件格式转换工具', url: 'https://www.aconvert.com/cn/', category: 'tools' },
+      { id: '32', name: 'VirusTotal', desc: '多引擎在线查毒', url: 'https://www.virustotal.com/', category: 'tools' },
+      { id: '33', name: '微博图床', desc: '免费图片上传', url: 'https://weibo.iiilab.com/', category: 'tech' },
+      { id: '34', name: '在线解压', desc: '在线解压各种压缩包', url: 'https://www.extract.me/zh', category: 'tech' },
+      { id: '35', name: '在线计算器', desc: '全能在线计算器', url: 'https://www.calculator.net/', category: 'tech' },
+      { id: '36', name: 'IP查询', desc: 'IP地址查询', url: 'https://www.ip138.com/', category: 'tech' },
+      { id: '37', name: 'Ping测试', desc: '网络延迟测试', url: 'https://ping.chinaz.com/', category: 'tech' },
+      { id: '38', name: '密码生成', desc: '安全密码生成器', url: 'https://passwordsgenerator.net/', category: 'tech' },
+      { id: '39', name: 'JSON格式化', desc: '在线JSON解析', url: 'https://jsonlint.com/', category: 'tech' },
+      { id: '40', name: 'Markdown编辑器', desc: '在线Markdown编写', url: 'https://markdownlivepreview.com/', category: 'tech' },
+      { id: '41', name: '代码格式化', desc: '代码美化工具', url: 'https://prettier.io/playground', category: 'tech' },
+      { id: '42', name: '正则测试', desc: '正则表达式测试', url: 'https://regex101.com/', category: 'tech' },
+      { id: '43', name: '在线IDE', desc: '浏览器端代码编辑器', url: 'https://replit.com', category: 'dev' },
+      { id: '44', name: 'LeetCode', desc: '编程刷题平台', url: 'https://leetcode.cn/', category: 'dev' },
+      { id: '45', name: 'GitHub', desc: '代码托管平台', url: 'https://github.com/', category: 'dev' },
+      { id: '46', name: '菜鸟教程', desc: '编程入门教程', url: 'https://www.runoob.com/', category: 'online-study' },
+      { id: '47', name: 'Coursera', desc: '在线学习平台', url: 'https://www.coursera.org/', category: 'online-study' },
+      { id: '48', name: '网易云课堂', desc: '在线教育平台', url: 'https://study.163.com/', category: 'online-study' },
+      { id: '49', name: '哔哩哔哩', desc: '综合视频平台', url: 'https://www.bilibili.com/', category: 'tv' },
+      { id: '50', name: 'AcFun', desc: '弹幕视频网站', url: 'https://www.acfun.cn/', category: 'online-anime' },
+      { id: '51', name: '樱花动漫', desc: '免费动漫观看', url: 'https://www.yinghuacd.com/', category: 'online-anime' },
+      { id: '52', name: '漫画台', desc: '在线漫画阅读', url: 'https://www.manhuatai.com/', category: 'comic' },
+      { id: '53', name: '轻小说文库', desc: '免费轻小说阅读', url: 'https://www.wenku8.net/', category: 'novel' },
+      { id: '54', name: 'Steam', desc: '游戏平台', url: 'https://store.steampowered.com/', category: 'online-game' },
+      { id: '55', name: 'TapTap', desc: '手游社区', url: 'https://www.taptap.cn/', category: 'online-game' },
+      { id: '56', name: '4399小游戏', desc: '经典小游戏', url: 'https://www.4399.com/', category: 'fun' },
+      { id: '57', name: '壁纸天堂', desc: '高清壁纸下载', url: 'https://www.bz55.com/', category: 'wallpaper' },
+      { id: '58', name: 'Pexels', desc: '免费图片素材', url: 'https://www.pexels.com/', category: 'material' },
+      { id: '59', name: 'Pixabay', desc: '免费图库', url: 'https://pixabay.com/', category: 'material' },
+      { id: '60', name: '搜书吧', desc: '电子书搜索下载', url: 'https://www.soshuba.net/', category: 'ebook' },
+      { id: '61', name: '盘搜搜', desc: '网盘资源搜索', url: 'https://www.pansousou.com/', category: 'pan' },
+      { id: '62', name: '百度学术', desc: '学术文献搜索', url: 'https://xueshu.baidu.com/', category: 'academic' },
+      { id: '63', name: 'Google学术', desc: 'Google学术搜索', url: 'https://scholar.google.com/', category: 'academic' },
+      { id: '64', name: '图片搜搜', desc: '以图搜图', url: 'https://images.google.com/', category: 'image' },
+      { id: '65', name: '软件管家', desc: '软件下载站', url: 'https://www.onlinedown.net/', category: 'soft-download' },
+      { id: '66', name: '绿茶软件园', desc: '绿色软件下载', url: 'https://www.33lc.com/', category: 'soft-download' },
+      { id: '67', name: 'Chrome应用商店', desc: '浏览器扩展', url: 'https://chrome.google.com/webstore', category: 'extension' },
+      { id: '68', name: '火狐扩展中心', desc: 'Firefox扩展', url: 'https://addons.mozilla.org/zh-CN/', category: 'extension' },
+      { id: '69', name: 'Office官方', desc: '微软Office', url: 'https://www.office.com/', category: 'install' },
+      { id: '70', name: 'Edge浏览器', desc: '微软浏览器', url: 'https://www.microsoft.com/zh-cn/edge', category: 'install' }
+    ];
 
-    const categoryNames = {
-      all: '全部工具', productivity: '效率工具', image: '图片处理',
-      file: '文件转换', life: '生活服务', education: '学习教育',
-      design: '设计工具', dev: '编程开发', entertainment: '娱乐休闲'
-    };
-
-    let currentCategory = 'all';
-    let searchQuery = '';
-
-    function renderTools(filteredTools) {
-      const grid = document.getElementById('tools-grid');
-      grid.innerHTML = '';
-      
-      if (filteredTools.length === 0) {
-        grid.innerHTML = `
-          <div style="text-align: center; padding: 80px 0; grid-column: 1 / -1;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="#9ca3af"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <h3 style="font-size: 20px; font-weight: 600; color: #111827; margin-bottom: 8px;">未找到工具</h3>
-            <p style="color: #6b7280;">尝试更换关键词或选择其他分类</p>
-          </div>
-        `;
-        return;
-      }
-
-      filteredTools.forEach(tool => {
-        const stars = Math.round(tool.pop / 20);
-        const starHtml = Array(5).fill(0).map((_, i) => 
-          `<span class="star ${i < stars ? 'star-filled' : 'star-empty'}"></span>`
-        ).join('');
-        
-        const card = document.createElement('div');
-        card.className = 'tool-card';
-        card.innerHTML = `
-          <div class="icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#3b82f6">${icons[tool.icon] || icons.Link}</svg>
-          </div>
-          <div style="flex: 1; min-width: 0;">
-            <h3 style="font-weight: 600; color: #111827; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tool.name}</h3>
-            <p style="font-size: 13px; color: #6b7280; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${tool.desc}</p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px;">
-              <div style="display: flex; align-items: center; gap: 4px;">
-                ${starHtml}
-                <span style="font-size: 12px; color: #9ca3af; margin-left: 8px;">${tool.pop}</span>
-              </div>
-              <div class="access-btn" style="display: flex; align-items: center; gap: 4px; color: #3b82f6; opacity: 0; transition: opacity 0.3s;">
-                <span style="font-size: 12px; font-weight: 500;">访问</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 5l7 7-7 7"/></svg>
-              </div>
-            </div>
-          </div>
-        `;
-        card.onclick = () => window.open(tool.url, '_blank');
-        card.onmouseenter = () => {
-          const accessDiv = card.querySelector('.access-btn');
-          if (accessDiv) accessDiv.style.opacity = '1';
-        };
-        card.onmouseleave = () => {
-          const accessDiv = card.querySelector('.access-btn');
-          if (accessDiv) accessDiv.style.opacity = '0';
-        };
-        grid.appendChild(card);
-      });
-    }
-
-    function filterCategory(category) {
-      currentCategory = category;
-      
-      document.querySelectorAll('.category-btn').forEach(btn => {
-        if (btn.dataset.category === category) {
-          btn.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
-          btn.style.color = 'white';
-          btn.style.boxShadow = '0 4px 16px rgba(30,64,175,0.3)';
-        } else {
-          const bgMap = { productivity: '#fef3c7', image: '#fce7f3', file: '#dbeafe', life: '#dcfce7', education: '#f3e8ff', design: '#e0e7ff', dev: '#cffafe', entertainment: '#fee2e2' };
-          const colorMap = { productivity: '#d97706', image: '#db2777', file: '#2563eb', life: '#16a34a', education: '#9333ea', design: '#6366f1', dev: '#0891b2', entertainment: '#dc2626' };
-          const cat = btn.dataset.category;
-          btn.style.background = bgMap[cat] || '#f3f4f6';
-          btn.style.color = colorMap[cat] || '#6b7280';
-          btn.style.boxShadow = 'none';
-        }
-      });
-
-      document.getElementById('category-title').textContent = categoryNames[category] || '全部工具';
-      const filtered = tools.filter(t => category === 'all' || t.category === category);
-      document.getElementById('tool-count').textContent = `共找到 ${filtered.length} 个工具`;
-      renderTools(filtered);
-    }
-
-    function handleSearch(query) {
-      searchQuery = query.toLowerCase();
-      const filtered = tools.filter(t => {
-        const matchCat = currentCategory === 'all' || t.category === currentCategory;
-        const matchSearch = !searchQuery || t.name.toLowerCase().includes(searchQuery) || t.desc.toLowerCase().includes(searchQuery);
-        return matchCat && matchSearch;
-      });
-      document.getElementById('tool-count').textContent = `共找到 ${filtered.length} 个工具`;
-      renderTools(filtered);
-    }
-
-    async function loadTools() {
+    function getFavicon(url) {
       try {
-        const response = await fetch('tools.json');
-        if (response.ok) {
-          tools = await response.json();
+        const u = new URL(url);
+        return `https://favicon.png.pub/v1/${btoa(u.origin)}`;
+      } catch {
+        return '';
+      }
+    }
+
+    function updateIconPreview(prefix) {
+      const url = document.getElementById(`${prefix}-url`).value.trim();
+      const preview = document.getElementById(`icon-preview-${prefix}`);
+      const img = preview.querySelector('img');
+      if (url) {
+        const iconSrc = getFavicon(url);
+        if (iconSrc) {
+          img.src = iconSrc;
         } else {
-          tools = [...defaultTools];
+          img.src = 'https://www.google.com/s2/favicons?domain=example.com&sz=64';
+        }
+      } else {
+        img.src = '';
+      }
+    }
+
+    function renderCategories() {
+      const typeList = document.getElementById('type-list');
+      const mNavlist = document.getElementById('m-navlist');
+      typeList.innerHTML = '';
+      mNavlist.innerHTML = '';
+
+      categories.forEach(cat => {
+        const div = document.createElement('div');
+        div.className = 'list';
+        div.innerHTML = `<a class="catlist" href="#category-${cat.id}"><i class="fa ${cat.icon}"></i><span>${cat.name}</span></a>`;
+        typeList.appendChild(div);
+
+        const a = document.createElement('a');
+        a.className = 'list catlist';
+        a.href = `#category-${cat.id}`;
+        a.innerHTML = `<i class="fa ${cat.icon}"></i><span>${cat.name}</span>`;
+        mNavlist.appendChild(a);
+
+        cat.children.forEach(child => {
+          const childDiv = document.createElement('div');
+          childDiv.className = 'list';
+          childDiv.style.paddingLeft = '2em';
+          childDiv.innerHTML = `<a class="catlist" href="#category-${child.id}"><i class="fa"></i><span>${child.name}</span></a>`;
+          typeList.appendChild(childDiv);
+
+          const childA = document.createElement('a');
+          childA.className = 'list catlist';
+          childA.href = `#category-${child.id}`;
+          childA.innerHTML = `<i class="fa"></i><span>${child.name}</span>`;
+          mNavlist.appendChild(childA);
+        });
+      });
+    }
+
+    function renderTools() {
+      const siteMain = document.getElementById('site-main');
+      siteMain.innerHTML = '';
+
+      categories.forEach(cat => {
+        const catTools = tools.filter(t => t.category === cat.id);
+        if (catTools.length > 0) {
+          const nameDiv = document.createElement('div');
+          nameDiv.className = 'site-name';
+          nameDiv.id = `category-${cat.id}`;
+          nameDiv.innerHTML = `<i class="fa ${cat.icon}"></i>${cat.name}`;
+          siteMain.appendChild(nameDiv);
+
+          const listDiv = document.createElement('div');
+          listDiv.className = 'site-list';
+          
+          catTools.forEach(tool => {
+            const item = document.createElement('div');
+            item.className = 'list urllist';
+            item.innerHTML = `
+              <a href="${tool.url}" rel="nofollow" target="_blank">
+                <p class="name"><img src="${getFavicon(tool.url)}">${tool.name}</p>
+                <p class="desc">${tool.desc}</p>
+              </a>
+            `;
+            listDiv.appendChild(item);
+          });
+
+          const emptyCount = 6 - (catTools.length % 6);
+          for (let i = 0; i < emptyCount && i < 6; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'list kongs';
+            listDiv.appendChild(empty);
+          }
+
+          siteMain.appendChild(listDiv);
+        }
+
+        cat.children.forEach(child => {
+          const childTools = tools.filter(t => t.category === child.id);
+          if (childTools.length > 0) {
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'site-name';
+            nameDiv.id = `category-${child.id}`;
+            nameDiv.innerHTML = `<i class="fa"></i>${child.name}`;
+            siteMain.appendChild(nameDiv);
+
+            const listDiv = document.createElement('div');
+            listDiv.className = 'site-list';
+            
+            childTools.forEach(tool => {
+              const item = document.createElement('div');
+              item.className = 'list urllist';
+              const iconSrc = tool.icon ? tool.icon : getFavicon(tool.url);
+              item.innerHTML = `
+                <a href="${tool.url}" rel="nofollow" target="_blank">
+                  <p class="name"><img src="${iconSrc}" onerror="this.src='https://www.google.com/s2/favicons?domain=example.com&sz=64'">${tool.name}</p>
+                  <p class="desc">${tool.desc}</p>
+                </a>
+              `;
+              listDiv.appendChild(item);
+            });
+
+            const emptyCount = 6 - (childTools.length % 6);
+            for (let i = 0; i < emptyCount && i < 6; i++) {
+              const empty = document.createElement('div');
+              empty.className = 'list kongs';
+              listDiv.appendChild(empty);
+            }
+
+            siteMain.appendChild(listDiv);
+          }
+        });
+      });
+    }
+
+    function updateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('zh-CN', { hour12: false });
+      const date = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+      const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
+      document.getElementById('nowTime').textContent = time;
+      document.getElementById('nowYmd').textContent = date;
+      document.getElementById('nowWeek').textContent = week;
+    }
+
+    function toggleMobileNav() {
+      const nav = document.getElementById('m-navlist-w');
+      nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleNavCollapse() {
+      const nav = document.getElementById('index-nav');
+      const main = document.querySelector('.index-main');
+      nav.classList.toggle('collapsed');
+      if (nav.classList.contains('collapsed')) {
+        main.style.marginLeft = '60px';
+      } else {
+        main.style.marginLeft = '220px';
+      }
+    }
+
+    function saveToolsToStorage() {
+      const text = JSON.stringify(tools);
+      localStorage.setItem('tools_data', text);
+      localStorage.setItem('tools_hash', getHash(text));
+    }
+
+    let lastFileHash = '';
+
+    function getHash(text) {
+      let hash = 0;
+      for (let i = 0; i < text.length; i++) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash).toString();
+    }
+
+    async function loadTools(forceRefresh = false) {
+      try {
+        const stored = localStorage.getItem('tools_data');
+        if (!forceRefresh && stored) {
+          tools = JSON.parse(stored);
+          const storedHash = localStorage.getItem('tools_hash');
+          if (storedHash) {
+            lastFileHash = storedHash;
+          }
+        } else {
+          try {
+            const response = await fetch('tools.json?_t=' + Date.now());
+            if (response.ok) {
+              const text = await response.text();
+              tools = JSON.parse(text);
+              lastFileHash = getHash(text);
+              localStorage.setItem('tools_data', text);
+              localStorage.setItem('tools_hash', lastFileHash);
+            } else {
+              tools = [...defaultTools];
+            }
+          } catch {
+            if (stored) {
+              tools = JSON.parse(stored);
+            } else {
+              tools = [...defaultTools];
+            }
+          }
         }
       } catch {
         tools = [...defaultTools];
       }
-      renderTools(tools);
-      
-      const isLocal = window.location.hostname === 'localhost' || 
-                      window.location.hostname === '127.0.0.1' || 
-                      window.location.protocol === 'file:';
+      renderCategories();
+      renderTools();
+
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
       if (isLocal) {
-        document.getElementById('admin-btn').style.display = 'inline-block';
+        document.getElementById('admin-btn').style.display = 'block';
+      }
+    }
+
+    async function checkFileUpdate() {
+      try {
+        const response = await fetch('tools.json?_t=' + Date.now());
+        if (response.ok) {
+          const text = await response.text();
+          const currentHash = getHash(text);
+          if (lastFileHash && lastFileHash !== currentHash) {
+            tools = JSON.parse(text);
+            lastFileHash = currentHash;
+            localStorage.setItem('tools_data', text);
+            localStorage.setItem('tools_hash', currentHash);
+            renderCategories();
+            renderTools();
+
+            const toast = document.createElement('div');
+            toast.className = 'update-toast';
+            toast.innerHTML = '<i class="fa fa-refresh"></i> 数据已自动更新！';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+          }
+        }
+      } catch (e) {
+        console.log('自动检查更新失败（需HTTP服务器）:', e);
+      }
+    }
+
+    function startFileWatcher() {
+      setInterval(checkFileUpdate, 5000);
+    }
+
+    function refreshFromFile() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const text = event.target.result;
+            const imported = JSON.parse(text);
+            if (Array.isArray(imported)) {
+              tools = imported;
+              lastFileHash = getHash(text);
+              localStorage.setItem('tools_data', text);
+              localStorage.setItem('tools_hash', lastFileHash);
+              renderCategories();
+              renderTools();
+              populateCategorySelects();
+              populateEditDropdown();
+              alert('从文件刷新成功！');
+            }
+          } catch { alert('刷新失败，请检查文件格式'); }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+      populateCategorySelects();
+      populateEditDropdown();
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    function populateCategorySelects() {
+      const selects = ['input-category', 'edit-category'];
+      selects.forEach(id => {
+        const select = document.getElementById(id);
+        select.innerHTML = '';
+        categories.forEach(cat => {
+          const opt = document.createElement('option');
+          opt.value = cat.id;
+          opt.textContent = cat.name;
+          select.appendChild(opt);
+          cat.children.forEach(child => {
+            const childOpt = document.createElement('option');
+            childOpt.value = child.id;
+            childOpt.textContent = `  └ ${child.name}`;
+            select.appendChild(childOpt);
+          });
+        });
+      });
+
+      const parentSelect = document.getElementById('input-parent-category');
+      parentSelect.innerHTML = '<option value="">无（一级分类）</option>';
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.id;
+        opt.textContent = cat.name;
+        parentSelect.appendChild(opt);
+        cat.children.forEach(child => {
+          const childOpt = document.createElement('option');
+          childOpt.value = child.id;
+          childOpt.textContent = `  └ ${child.name}`;
+          parentSelect.appendChild(childOpt);
+        });
+      });
+    }
+
+    function populateEditDropdown() {
+      const select = document.getElementById('edit-tool-select');
+      select.innerHTML = '<option value="">请选择工具</option>';
+      tools.forEach(tool => {
+        const opt = document.createElement('option');
+        opt.value = tool.id;
+        opt.textContent = tool.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function addCategory() {
+      const name = document.getElementById('input-category-name').value.trim();
+      const icon = document.getElementById('input-category-icon').value;
+      const parentId = document.getElementById('input-parent-category').value;
+
+      if (!name) {
+        alert('请输入分类名称');
+        return;
+      }
+
+      const newId = name.toLowerCase().replace(/\s+/g, '-');
+
+      if (parentId) {
+        const parent = categories.find(cat => cat.id === parentId);
+        if (parent) {
+          parent.children.push({ id: newId, name });
+        } else {
+          const grandparent = categories.find(cat => cat.children.find(ch => ch.id === parentId));
+          if (grandparent) {
+            const parentChild = grandparent.children.find(ch => ch.id === parentId);
+            if (!parentChild.children) parentChild.children = [];
+            parentChild.children.push({ id: newId, name });
+          }
+        }
+      } else {
+        categories.push({ id: newId, name, icon, children: [] });
+      }
+
+      renderCategories();
+      renderTools();
+      populateCategorySelects();
+      document.getElementById('input-category-name').value = '';
+      alert('分类添加成功！');
+    }
+
+    function addTool() {
+      const name = document.getElementById('input-name').value.trim();
+      const desc = document.getElementById('input-desc').value.trim();
+      const url = document.getElementById('input-url').value.trim();
+      const category = document.getElementById('input-category').value;
+      const icon = document.getElementById('input-icon').value.trim();
+
+      if (!name || !desc || !url) {
+        alert('请填写完整信息');
+        return;
+      }
+
+      const finalUrl = url.startsWith('http') ? url : 'https://' + url;
+      const finalIcon = icon || getFavicon(finalUrl);
+
+      tools.push({
+        id: Date.now().toString(),
+        name,
+        desc,
+        url: finalUrl,
+        category,
+        icon: finalIcon || undefined
+      });
+
+      saveToolsToStorage();
+      renderTools();
+      closeModal();
+      document.getElementById('input-name').value = '';
+      document.getElementById('input-desc').value = '';
+      document.getElementById('input-url').value = '';
+      document.getElementById('input-icon').value = '';
+      document.getElementById('icon-preview-input').querySelector('img').src = '';
+
+      if (confirm('工具添加成功！是否立即导出数据？')) exportTools();
+    }
+
+    function loadToolForEdit() {
+      const id = document.getElementById('edit-tool-select').value;
+      if (!id) {
+        document.getElementById('edit-form').style.display = 'none';
+        return;
+      }
+      const tool = tools.find(t => t.id === id);
+      if (tool) {
+        document.getElementById('edit-name').value = tool.name;
+        document.getElementById('edit-desc').value = tool.desc;
+        document.getElementById('edit-url').value = tool.url;
+        document.getElementById('edit-category').value = tool.category;
+        document.getElementById('edit-icon').value = tool.icon || '';
+        
+        const previewImg = document.getElementById('icon-preview-edit').querySelector('img');
+        previewImg.src = tool.icon || getFavicon(tool.url) || 'https://www.google.com/s2/favicons?domain=example.com&sz=64';
+        
+        document.getElementById('edit-form').style.display = 'block';
+      }
+    }
+
+    function updateTool() {
+      const id = document.getElementById('edit-tool-select').value;
+      const name = document.getElementById('edit-name').value.trim();
+      const desc = document.getElementById('edit-desc').value.trim();
+      const url = document.getElementById('edit-url').value.trim();
+      const category = document.getElementById('edit-category').value;
+      const icon = document.getElementById('edit-icon').value.trim();
+
+      if (!name || !desc || !url) {
+        alert('请填写完整信息');
+        return;
+      }
+
+      const finalUrl = url.startsWith('http') ? url : 'https://' + url;
+      const finalIcon = icon || getFavicon(finalUrl);
+
+      const index = tools.findIndex(t => t.id === id);
+      if (index !== -1) {
+        tools[index] = { ...tools[index], name, desc, url: finalUrl, category, icon: finalIcon || undefined };
+        saveToolsToStorage();
+        renderTools();
+        populateEditDropdown();
+        closeModal();
+        if (confirm('修改成功！是否立即导出数据？')) exportTools();
+      }
+    }
+
+    function deleteTool() {
+      const id = document.getElementById('edit-tool-select').value;
+      if (confirm('确定要删除吗？')) {
+        tools = tools.filter(t => t.id !== id);
+        saveToolsToStorage();
+        renderTools();
+        populateEditDropdown();
+        document.getElementById('edit-form').style.display = 'none';
+        if (confirm('删除成功！是否立即导出数据？')) exportTools();
       }
     }
 
     function exportTools() {
-      const dataStr = JSON.stringify(tools, null, 2);
-      const blob = new Blob([dataStr], { type: 'application/json' });
+      const data = JSON.stringify(tools, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'tools.json';
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
 
@@ -703,316 +848,80 @@
       input.onchange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        
         const reader = new FileReader();
         reader.onload = (event) => {
           try {
             const imported = JSON.parse(event.target.result);
             if (Array.isArray(imported)) {
               tools = imported;
-              filterCategory(currentCategory);
+              saveToolsToStorage();
+              renderCategories();
+              renderTools();
               alert('导入成功！');
-            } else {
-              alert('无效的JSON格式');
             }
-          } catch {
-            alert('JSON解析失败');
-          }
+          } catch { alert('导入失败'); }
         };
         reader.readAsText(file);
       };
       input.click();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadTools();
-      
-      if (window.innerWidth >= 768) {
-        document.getElementById('desktop-search').style.display = 'block';
-        document.getElementById('mobile-search').style.display = 'none';
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) {
-        document.getElementById('desktop-search').style.display = 'block';
-        document.getElementById('mobile-search').style.display = 'none';
-      } else {
-        document.getElementById('desktop-search').style.display = 'none';
-        document.getElementById('mobile-search').style.display = 'block';
-      }
-    });
-
-    let editingToolId = null;
-
-    function openModal() {
-      document.getElementById('modal').style.display = 'flex';
-      populateEditDropdown();
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      editingToolId = null;
-      document.getElementById('edit-form').style.display = 'none';
-      document.getElementById('edit-tool-select').value = '';
-    }
-
-    function switchTab(tab) {
-      const addTab = document.getElementById('tab-add');
-      const editTab = document.getElementById('tab-edit');
-      const checkTab = document.getElementById('tab-check');
-      const addContent = document.getElementById('tab-add-content');
-      const editContent = document.getElementById('tab-edit-content');
-      const checkContent = document.getElementById('tab-check-content');
-      
-      addTab.style.background = '#f3f4f6';
-      addTab.style.color = '#6b7280';
-      editTab.style.background = '#f3f4f6';
-      editTab.style.color = '#6b7280';
-      checkTab.style.background = '#f3f4f6';
-      checkTab.style.color = '#6b7280';
-      addContent.style.display = 'none';
-      editContent.style.display = 'none';
-      checkContent.style.display = 'none';
-      
-      if (tab === 'add') {
-        addTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
-        addTab.style.color = 'white';
-        addContent.style.display = 'block';
-      } else if (tab === 'edit') {
-        editTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
-        editTab.style.color = 'white';
-        editContent.style.display = 'block';
-        populateEditDropdown();
-      } else if (tab === 'check') {
-        checkTab.style.background = 'linear-gradient(135deg, #1e40af, #2563eb)';
-        checkTab.style.color = 'white';
-        checkContent.style.display = 'block';
-      }
-    }
-
-    function populateEditDropdown() {
-      const select = document.getElementById('edit-tool-select');
-      select.innerHTML = '<option value="">请选择工具</option>';
-      tools.forEach(tool => {
-        const option = document.createElement('option');
-        option.value = tool.id;
-        option.textContent = tool.name;
-        select.appendChild(option);
-      });
-    }
-
-    function addTool() {
-      const name = document.getElementById('input-name').value.trim();
-      const desc = document.getElementById('input-desc').value.trim();
-      const url = document.getElementById('input-url').value.trim();
-      const category = document.getElementById('input-category').value;
-      const icon = document.getElementById('input-icon').value;
-
-      if (!name || !desc || !url) {
-        alert('请填写完整信息');
-        return;
-      }
-
-      const newTool = {
-        id: Date.now().toString(),
-        name,
-        desc,
-        url: url.startsWith('http') ? url : 'https://' + url,
-        category,
-        icon,
-        pop: 50
-      };
-
-      tools.push(newTool);
-      filterCategory(currentCategory);
-      closeModal();
-      
-      document.getElementById('input-name').value = '';
-      document.getElementById('input-desc').value = '';
-      document.getElementById('input-url').value = '';
-      document.getElementById('input-category').value = 'productivity';
-      document.getElementById('input-icon').value = 'Languages';
-      
-      if (confirm('工具添加成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
-        exportTools();
-      }
-    }
-
-    function loadToolForEdit() {
-      const toolId = document.getElementById('edit-tool-select').value;
-      if (!toolId) {
-        document.getElementById('edit-form').style.display = 'none';
-        editingToolId = null;
-        return;
-      }
-
-      const tool = tools.find(t => t.id === toolId);
-      if (tool) {
-        editingToolId = toolId;
-        document.getElementById('edit-name').value = tool.name;
-        document.getElementById('edit-desc').value = tool.desc;
-        document.getElementById('edit-url').value = tool.url;
-        document.getElementById('edit-category').value = tool.category;
-        document.getElementById('edit-icon').value = tool.icon;
-        document.getElementById('edit-form').style.display = 'flex';
-      }
-    }
-
-    function updateTool() {
-      if (!editingToolId) return;
-
-      const name = document.getElementById('edit-name').value.trim();
-      const desc = document.getElementById('edit-desc').value.trim();
-      const url = document.getElementById('edit-url').value.trim();
-      const category = document.getElementById('edit-category').value;
-      const icon = document.getElementById('edit-icon').value;
-
-      if (!name || !desc || !url) {
-        alert('请填写完整信息');
-        return;
-      }
-
-      const index = tools.findIndex(t => t.id === editingToolId);
-      if (index !== -1) {
-        tools[index] = {
-          ...tools[index],
-          name,
-          desc,
-          url: url.startsWith('http') ? url : 'https://' + url,
-          category,
-          icon
-        };
-        filterCategory(currentCategory);
-        closeModal();
-        
-        if (confirm('工具修改成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
-          exportTools();
-        }
-      }
-    }
-
-    function deleteTool() {
-      if (!editingToolId) return;
-
-      if (confirm('确定要删除这个工具吗？')) {
-        const index = tools.findIndex(t => t.id === editingToolId);
-        if (index !== -1) {
-          tools.splice(index, 1);
-          filterCategory(currentCategory);
-          closeModal();
-          
-          if (confirm('工具删除成功！\n\n是否立即导出最新数据到 tools.json 文件？\n（导出后需要上传到 GitHub 才能同步到网站）')) {
-            exportTools();
-          }
-        }
-      }
-    }
-
     async function checkAllSites() {
-      const btn = document.getElementById('check-all-btn');
+      const btn = document.getElementById('check-btn');
       const progress = document.getElementById('check-progress');
       const results = document.getElementById('check-results');
-      const progressText = document.getElementById('progress-text');
-      const progressBar = document.getElementById('progress-bar');
-      
+      const text = document.getElementById('progress-text');
+      const fill = document.getElementById('progress-fill');
+
       btn.disabled = true;
       btn.textContent = '检测中...';
       progress.style.display = 'block';
       results.innerHTML = '';
-      
-      let checked = 0;
+
+      let checked = 0, failed = 0;
       const total = tools.length;
-      const failedTools = [];
-      
+
       for (const tool of tools) {
         checked++;
-        progressText.textContent = `${checked}/${total}`;
-        progressBar.style.width = `${(checked / total) * 100}%`;
+        text.textContent = `${checked}/${total}`;
+        fill.style.width = `${(checked / total) * 100}%`;
+
+        const success = await checkSite(tool.url);
+        const div = document.createElement('div');
+        div.className = `check-result ${success ? 'check-success' : 'check-fail'}`;
+        div.innerHTML = success ? `${tool.name} - 可用` : `${tool.name} - 无法访问`;
+        results.appendChild(div);
         
-        const result = await checkSite(tool.url);
-        const resultDiv = document.createElement('div');
-        resultDiv.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px;';
-        
-        if (result.success) {
-          resultDiv.style.background = '#ecfdf5';
-          resultDiv.innerHTML = `
-            <span style="color: #065f46; font-weight: 500;">${tool.name}</span>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-              <span style="color: #10b981;">${result.time}ms</span>
-            </div>
-          `;
-        } else {
-          resultDiv.style.background = '#fef2f2';
-          resultDiv.innerHTML = `
-            <span style="color: #991b1b; font-weight: 500;">${tool.name}</span>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-              <span style="color: #ef4444;">${result.error}</span>
-            </div>
-          `;
-          failedTools.push(tool);
-        }
-        
-        results.appendChild(resultDiv);
-        results.scrollTop = results.scrollHeight;
-        
-        await new Promise(resolve => setTimeout(resolve, 200));
+        if (!success) failed++;
+        await new Promise(r => setTimeout(r, 200));
       }
-      
+
       btn.disabled = false;
       btn.textContent = '重新检测';
       
-      if (failedTools.length > 0) {
-        results.innerHTML += `
-          <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 8px;">
-            <div style="font-weight: 600; color: #92400e; margin-bottom: 8px;">检测结果：${failedTools.length} 个网站无法访问</div>
-            <div style="font-size: 13px; color: #b45309;">建议检查这些网站链接是否正确或更新为可用链接</div>
-          </div>
-        `;
-      } else {
-        results.innerHTML += `
-          <div style="margin-top: 16px; padding: 12px; background: #ecfdf5; border-radius: 8px;">
-            <div style="font-weight: 600; color: #065f46;">🎉 所有网站检测通过！</div>
-          </div>
-        `;
-      }
+      const summary = document.createElement('div');
+      summary.className = `check-summary ${failed === 0 ? 'summary-success' : 'summary-fail'}`;
+      summary.innerHTML = failed === 0 ? '🎉 所有网站检测通过！' : `检测完成：${failed}个网站无法访问，请检查链接`;
+      results.appendChild(summary);
     }
 
     async function checkSite(url) {
-      const startTime = Date.now();
       try {
-        const response = await fetch(url, {
-          method: 'HEAD',
-          mode: 'no-cors',
-          timeout: 10000
-        });
-        return { success: true, time: Date.now() - startTime };
-      } catch (error) {
-        try {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('timeout')), 10000)
-          );
-          const loadPromise = new Promise((resolve) => {
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(true);
-          });
-          await Promise.race([loadPromise, timeoutPromise]);
-          return { success: true, time: Date.now() - startTime };
-        } catch {
-          return { success: false, error: '无法访问', time: Date.now() - startTime };
-        }
+        const response = await fetch(url, { method: 'HEAD', mode: 'no-cors', signal: AbortSignal.timeout(10000) });
+        return true;
+      } catch {
+        return false;
       }
     }
 
     document.getElementById('modal').addEventListener('click', (e) => {
-      if (e.target.id === 'modal') {
-        closeModal();
-      }
+      if (e.target.id === 'modal') closeModal();
     });
+
+    setInterval(updateTime, 1000);
+    updateTime();
+    loadTools();
+    startFileWatcher();
   </script>
 </body>
 </html>
